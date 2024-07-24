@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "124482953670",
+    "project_id": "genlanglearninglab",
+    "storage_bucket": "genlanglearninglab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124482953670:android:b86900b1fd56fb71e812c7",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHdjFOmeGLlOifp1Fb6edEu_reBM4ctGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124482953670:android:8730065805f3501ee812c7",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHdjFOmeGLlOifp1Fb6edEu_reBM4ctGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124482953670:android:38979c8b45f39db9e812c7",
+        "android_client_info": {
+          "package_name": "com.playbae.tll"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHdjFOmeGLlOifp1Fb6edEu_reBM4ctGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
