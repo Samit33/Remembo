@@ -1,47 +1,56 @@
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF9C91FC), Color(0xFF6952F0)],
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          NavBarIcon(Icons.home_outlined),
-          NavBarIcon(Icons.bookmark_border),
-          NavBarIcon(Icons.access_time),
-          Container(
-            width: 52,
-            height: 26,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF9C91FC), Color(0xFF6952F0)],
-              ),
-              borderRadius: BorderRadius.circular(60),
-            ),
-            child: Center(
-              child: Icon(Icons.add, color: Colors.white, size: 20),
-            ),
-          ),
+          _buildNavItem(Icons.home, isActive: true),
+          _buildNavItem(Icons.list),
+          _buildNavItem(Icons.info_outline),
+          _buildAddButton(),
         ],
       ),
     );
   }
-}
 
-class NavBarIcon extends StatelessWidget {
-  final IconData icon;
+  Widget _buildNavItem(IconData icon, {bool isActive = false}) {
+    return Icon(
+      icon,
+      color: isActive ? Colors.green : Colors.grey,
+    );
+  }
 
-  NavBarIcon(this.icon);
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(icon, color: Colors.white);
+  Widget _buildAddButton() {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
   }
 }

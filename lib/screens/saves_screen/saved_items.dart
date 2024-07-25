@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SavedItemsList extends StatelessWidget {
   final FirebaseFirestore firestore;
 
-  SavedItemsList({required this.firestore});
+  const SavedItemsList({Key? key, required this.firestore}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: firestore.collection('user1').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -16,21 +17,20 @@ class SavedItemsList extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         return ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.all(16),
           children: snapshot.data!.docs.map((doc) {
-            Map data = doc.data() as Map;
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            List<String> allTags = List<String>.from(data['overallTags'] ?? []);
+            List<String> displayTags = _getShortestTags(allTags, 3);
             return SavedItem(
               title: data['title'] ?? 'No Title',
-              subtitle: data['subtitle'] ?? 'No Subtitle',
-              tags: List.from(data['tags'] ?? []),
-              duration: data['duration'] ?? '< 5min',
+              tags: displayTags,
               initialActiveState: data['isActive'] ?? true,
               onToggle: (bool newState) {
-                // Update the document in Firestore
                 doc.reference.update({'isActive': newState});
               },
             );
@@ -39,24 +39,27 @@ class SavedItemsList extends StatelessWidget {
       },
     );
   }
+
+  List<String> _getShortestTags(List<String> tags, int count) {
+    if (tags.length <= count) return tags;
+    tags.sort((a, b) => a.length.compareTo(b.length));
+    return tags.take(count).toList();
+  }
 }
 
 class SavedItem extends StatefulWidget {
   final String title;
-  final String subtitle;
-  final List tags;
-  final String duration;
+  final List<String> tags;
   final bool initialActiveState;
   final Function(bool) onToggle;
 
-  SavedItem({
+  const SavedItem({
+    Key? key,
     required this.title,
-    required this.subtitle,
     required this.tags,
-    required this.duration,
-    this.initialActiveState = true,
+    required this.initialActiveState,
     required this.onToggle,
-  });
+  }) : super(key: key);
 
   @override
   _SavedItemState createState() => _SavedItemState();
@@ -74,16 +77,17 @@ class _SavedItemState extends State<SavedItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF6C56F2).withOpacity(0.1),
-            blurRadius: 30,
-            offset: Offset(0, 4),
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -96,10 +100,14 @@ class _SavedItemState extends State<SavedItem> {
               Expanded(
                 child: Text(
                   widget.title,
-                  style: TextStyle(fontSize: 16, color: Color(0xFF1F1F1F)),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F1F1F),
+                  ),
                 ),
               ),
-              Switch(
+              CupertinoSwitch(
                 value: isActive,
                 onChanged: (value) {
                   setState(() {
@@ -107,65 +115,47 @@ class _SavedItemState extends State<SavedItem> {
                   });
                   widget.onToggle(value);
                 },
-                activeColor: Color(0xFF6C56F2),
+                activeColor: const Color(0xFF6C56F2),
               ),
             ],
           ),
-          SizedBox(height: 8),
-          Text(
-            widget.subtitle,
-            style: TextStyle(fontSize: 14, color: Color(0xFF545454)),
-          ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             children: [
-              ...widget.tags.map((tag) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF1EFFE),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: Text(
-                        tag,
-                        style:
-                            TextStyle(color: Color(0xFF6C56F2), fontSize: 12),
-                      ),
-                    ),
-                  )),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF1EFFE),
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Text(
-                  widget.duration,
-                  style: TextStyle(color: Color(0xFF6C56F2), fontSize: 12),
+              Expanded(
+                child: Wrap(
+                  children:
+                      widget.tags.take(3).map((tag) => _buildTag(tag)).toList(),
                 ),
               ),
-              Spacer(),
               IconButton(
-                icon: Icon(Icons.add_circle_outline),
-                color: Color(0xFF6C56F2),
+                icon: const Icon(Icons.add_circle_outline),
+                color: const Color(0xFF6C56F2),
                 onPressed: () {
                   // TODO: Implement add to collections functionality
                 },
               ),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFE3E0F2)),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.more_horiz, color: Color(0xFF545454)),
-              ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTag(String tag) {
+    return Container(
+      margin: const EdgeInsets.all(2),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1EFFE),
+        borderRadius: BorderRadius.circular(7),
+      ),
+      child: Text(
+        tag,
+        style: const TextStyle(
+          color: Color(0xFF6C56F2),
+          fontSize: 12,
+        ),
       ),
     );
   }
