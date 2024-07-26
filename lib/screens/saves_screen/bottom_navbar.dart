@@ -1,4 +1,6 @@
+// bottom_nav_bar.dart
 import 'package:flutter/material.dart';
+import 'add_url_dialog.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -26,7 +28,7 @@ class BottomNavBar extends StatelessWidget {
           _buildNavItem(Icons.home, isActive: true),
           _buildNavItem(Icons.list),
           _buildNavItem(Icons.info_outline),
-          _buildAddButton(),
+          _buildAddButton(context),
         ],
       ),
     );
@@ -39,18 +41,35 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton() {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(20),
+  Widget _buildAddButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showAddUrlDialog(context),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
+    );
+  }
+
+  void _showAddUrlDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddUrlDialog(
+          onSave: (url) {
+            // TODO: Implement save functionality
+            print('URL to save: $url');
+          },
+        );
+      },
     );
   }
 }

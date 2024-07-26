@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'add_to_collection_dialog.dart';
+
 class SavedItemsList extends StatelessWidget {
   final FirebaseFirestore firestore;
   final String searchQuery;
@@ -44,6 +46,7 @@ class SavedItemsList extends StatelessWidget {
             List<String> allTags = List<String>.from(data['overallTags'] ?? []);
             List<String> displayTags = _getShortestTags(allTags, 3);
             return SavedItem(
+              itemId: doc.id,
               title: data['title'] ?? 'No Title',
               tags: displayTags,
               initialActiveState: data['isActive'] ?? true,
@@ -69,6 +72,7 @@ class SavedItem extends StatefulWidget {
   final List<String> tags;
   final bool initialActiveState;
   final Function(bool) onToggle;
+  final String itemId;
 
   const SavedItem({
     Key? key,
@@ -76,6 +80,7 @@ class SavedItem extends StatefulWidget {
     required this.tags,
     required this.initialActiveState,
     required this.onToggle,
+    required this.itemId,
   }) : super(key: key);
 
   @override
@@ -149,7 +154,14 @@ class _SavedItemState extends State<SavedItem> {
                 icon: const Icon(Icons.add_circle_outline),
                 color: const Color(0xFF6C56F2),
                 onPressed: () {
-                  // TODO: Implement add to collections functionality
+                  showDialog(
+                    context: context,
+                    builder: (context) => AddToCollectionDialog(
+                      firestore: FirebaseFirestore.instance,
+                      userId: 'user1', // Replace with your actual user ID
+                      itemId: widget.itemId, // Replace with your actual item ID
+                    ),
+                  ); // TODO: Implement add to collections functionality
                 },
               ),
             ],
