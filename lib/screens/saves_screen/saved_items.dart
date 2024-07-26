@@ -4,8 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SavedItemsList extends StatelessWidget {
   final FirebaseFirestore firestore;
+  final String searchQuery;
 
-  const SavedItemsList({Key? key, required this.firestore}) : super(key: key);
+  const SavedItemsList({
+    Key? key,
+    required this.firestore,
+    required this.searchQuery,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +25,21 @@ class SavedItemsList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
+        final filteredDocs = snapshot.data!.docs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          final title = (data['title'] ?? '').toLowerCase();
+          final tags = List<String>.from(data['overallTags'] ?? [])
+              .map((tag) => tag.toLowerCase())
+              .toList();
+          final query = searchQuery.toLowerCase();
+
+          return title.contains(query) ||
+              tags.any((tag) => tag.contains(query));
+        }).toList();
+
         return ListView(
           padding: const EdgeInsets.all(16),
-          children: snapshot.data!.docs.map((doc) {
+          children: filteredDocs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             List<String> allTags = List<String>.from(data['overallTags'] ?? []);
             List<String> displayTags = _getShortestTags(allTags, 3);

@@ -6,10 +6,23 @@ import 'saved_items.dart';
 import 'search_bar.dart';
 import 'bottom_navbar.dart';
 
-class SavesScreen extends StatelessWidget {
+class SavesScreen extends StatefulWidget {
   final FirebaseFirestore firestore;
 
   const SavesScreen({Key? key, required this.firestore}) : super(key: key);
+
+  @override
+  _SavesScreenState createState() => _SavesScreenState();
+}
+
+class _SavesScreenState extends State<SavesScreen> {
+  String _searchQuery = '';
+
+  void _updateSearchQuery(String query) {
+    setState(() {
+      _searchQuery = query;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +32,7 @@ class SavesScreen extends StatelessWidget {
       body: Column(
         children: [
           const CategoryTabs(),
-          const SearchBarCustom(),
+          SearchBarCustom(onSearch: _updateSearchQuery),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -29,7 +42,10 @@ class SavesScreen extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: SavedItemsList(firestore: firestore),
+              child: SavedItemsList(
+                firestore: widget.firestore,
+                searchQuery: _searchQuery,
+              ),
             ),
           ),
         ],

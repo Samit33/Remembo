@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SearchBarCustom extends StatelessWidget {
-  const SearchBarCustom({Key? key}) : super(key: key);
+  final Function(String) onSearch;
+
+  const SearchBarCustom({Key? key, required this.onSearch}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +22,13 @@ class SearchBarCustom extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Icon(Icons.search, color: Colors.grey),
             ),
-            const Expanded(
+            Expanded(
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search...',
                   border: InputBorder.none,
                 ),
+                onChanged: onSearch,
               ),
             ),
             Container(
