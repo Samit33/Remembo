@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'add_to_collection_dialog.dart';
 
-class SavedItemsList extends StatelessWidget {
+class SavedItemsList extends StatefulWidget {
   final FirebaseFirestore firestore;
   final String searchQuery;
 
@@ -15,9 +14,14 @@ class SavedItemsList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _SavedItemsListState createState() => _SavedItemsListState();
+}
+
+class _SavedItemsListState extends State<SavedItemsList> {
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore.collection('user1').snapshots(),
+    return StreamBuilder(
+      stream: widget.firestore.collection('user1').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -28,12 +32,12 @@ class SavedItemsList extends StatelessWidget {
         }
 
         final filteredDocs = snapshot.data!.docs.where((doc) {
-          final data = doc.data() as Map<String, dynamic>;
+          final data = doc.data() as Map;
           final title = (data['title'] ?? '').toLowerCase();
-          final tags = List<String>.from(data['overallTags'] ?? [])
+          final tags = List.from(data['overallTags'] ?? [])
               .map((tag) => tag.toLowerCase())
               .toList();
-          final query = searchQuery.toLowerCase();
+          final query = widget.searchQuery.toLowerCase();
 
           return title.contains(query) ||
               tags.any((tag) => tag.contains(query));
@@ -42,26 +46,38 @@ class SavedItemsList extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.all(16),
           children: filteredDocs.map((doc) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-            List<String> allTags = List<String>.from(data['overallTags'] ?? []);
-            List<String> displayTags = _getShortestTags(allTags, 3);
-            return SavedItem(
-              itemId: doc.id,
-              title: data['title'] ?? 'No Title',
-              tags: displayTags,
-              initialActiveState: data['isActive'] ?? true,
-              onToggle: (bool newState) {
-                doc.reference.update({'isActive': newState});
-              },
-            );
+            if (doc.id != 'collections') {
+              Map data = doc.data() as Map;
+              List allTags = List.from(data['overallTags'] ?? []);
+              List displayTags = _getShortestTags(allTags, 3);
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/resource_screen',
+                      arguments: doc.id);
+                },
+                child: SavedItem(
+                  itemId: doc.id,
+                  title: data['title'] ?? 'No Title',
+                  tags: displayTags,
+                  initialActiveState: data['isActive'] ?? true,
+                  onToggle: (bool newState) {
+                    doc.reference.update({'isActive': newState});
+                  },
+                ),
+              );
+            } else {
+              return Container(); // Return an empty container for 'collections' document
+            }
           }).toList(),
         );
       },
     );
   }
 
-  List<String> _getShortestTags(List<String> tags, int count) {
+  List _getShortestTags(List tags, int count) {
     if (tags.length <= count) return tags;
+
     tags.sort((a, b) => a.length.compareTo(b.length));
     return tags.take(count).toList();
   }
@@ -69,7 +85,7 @@ class SavedItemsList extends StatelessWidget {
 
 class SavedItem extends StatefulWidget {
   final String title;
-  final List<String> tags;
+  final List tags;
   final bool initialActiveState;
   final Function(bool) onToggle;
   final String itemId;

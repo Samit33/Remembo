@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^5.1.0
   flutter_svg : ^2.0.10+1   
   url_launcher: ^6.3.0
+  flutter_markdown: ^0.7.3
          
           
 

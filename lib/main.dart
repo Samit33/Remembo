@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'screens/saves_screen/saves_screen.dart';
+import 'screens/resource_screen/resource_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: SavesScreen(firestore: firestore),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SavesScreen(firestore: firestore),
+        '/resource_screen': (context) => ResourceScreen(
+            docId: ModalRoute.of(context)?.settings.arguments as String),
+      },
     );
   }
 }
