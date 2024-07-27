@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'resource_card.dart';
+import 'progress_timeline.dart';
 
-class ResourceScreen extends StatefulWidget {
+class ResourceScreen extends StatelessWidget {
   final String docId;
 
   const ResourceScreen({Key? key, required this.docId}) : super(key: key);
 
   @override
-  _ResourceScreenState createState() => _ResourceScreenState();
-}
-
-class _ResourceScreenState extends State<ResourceScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resource Screen'),
-      ),
-      body: StreamBuilder(
+      body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user1')
-            .doc(widget.docId)
+            .doc(docId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -36,64 +29,61 @@ class _ResourceScreenState extends State<ResourceScreen> {
             return const Center(child: Text('No data available'));
           }
 
-          Map data = snapshot.data!.data() as Map;
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
 
           String title = data['title'] ?? 'No Title';
-          String author = data['author'] ?? 'Unknown Author';
-          String date = data['date'] ?? 'No Date';
-          String content = data['content'] ?? 'No Content';
+          String description = data['description'] ?? 'No Description';
+          String imageUrl = data['imageUrl'] ?? '';
+          List<String> tags =
+              (data['tags'] as List?)?.map((tag) => tag as String).toList() ??
+                  [];
 
-          return CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
+          // Process section titles with identifiers
+          List<Map<String, dynamic>> cards =
+              (data['learning_cards']?['args']?['cards'] as List?)
+                      ?.map((card) => card as Map<String, dynamic>)
+                      .toList() ??
+                  [];
+
+          // Sort cards by section_identifier and remove duplicates
+          cards.sort((a, b) => (a['section_identifier'] as num)
+              .compareTo(b['section_identifier'] as num));
+
+          List<String> uniqueSectionTitles = [];
+          Set<String> seenTitles = {};
+
+          for (var card in cards) {
+            String title = card['section_title'] as String;
+            if (!seenTitles.contains(title)) {
+              uniqueSectionTitles.add(title);
+              seenTitles.add(title);
+            }
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ResourceCard(
+                  title: title,
+                  description: description,
+                  imageUrl: imageUrl,
+                  tags: tags,
+                ),
+                ProgressTimeline(sectionTitles: uniqueSectionTitles),
+                Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'by $author, $date',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Colors.grey),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: MarkdownBody(data: content),
-                ),
-              ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Next'),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Start'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      minimumSize: const Size(double.infinity, 50),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

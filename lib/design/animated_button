@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+
+class AnimatedButton extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const AnimatedButton({Key? key, required this.child, required this.onTap}) : super(key: key);
+
+  @override
+  _AnimatedButtonState createState() => _AnimatedButtonState();
+}
+
+class _AnimatedButtonState extends State<AnimatedButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        transform: Matrix4.identity()..scale(_isPressed ? 0.95 : 1.0),
+        child: widget.child,
+      ),
+    );
+  }
+}

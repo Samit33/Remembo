@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddUrlDialog extends StatelessWidget {
   final Function(String) onSave;
+  final FirebaseFirestore firestore;
 
-  const AddUrlDialog({Key? key, required this.onSave}) : super(key: key);
+  const AddUrlDialog({Key? key, required this.onSave, required this.firestore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +19,7 @@ class AddUrlDialog extends StatelessWidget {
       content: TextField(
         decoration: InputDecoration(
           hintText: 'e.g. https://fs.blog/first-principles/',
-          hintStyle: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[400]), // Smaller, lighter hintText
+          hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
           border: OutlineInputBorder(),
         ),
         onChanged: (value) {
@@ -38,19 +39,41 @@ class AddUrlDialog extends StatelessWidget {
           ),
           onPressed: () async {
             if (await canLaunchUrl(Uri.parse(url))) {
-              // URL is valid, trigger Firestore cloud function
-              final endpoint = 'https://process-url-2sel6rjo4q-uc.a.run.app/?url=$url';
+              // Add the URL to Firestore with 'processing' status
+              await firestore.collection('user1').add({
+                'url': url,
+                'status': 'processing',
+                'timestamp': FieldValue.serverTimestamp(),
+              });
+
+              // Trigger the cloud function
+              final endpoint =
+                  'https://process-url-2sel6rjo4q-uc.a.run.app/?url=$url';
               final response = await http.get(Uri.parse(endpoint));
               if (response.statusCode == 200) {
                 onSave(url);
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Processing $url. This may take a few minutes.')),
+                );
               } else {
                 // Handle error
-                print('Error triggering cloud function: ${response.statusCode}');
+                print(
+                    'Error triggering cloud function: ${response.statusCode}');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text('Error processing URL. Please try again.')),
+                );
               }
             } else {
               // Handle invalid URL
               print('Invalid URL');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('Invalid URL. Please enter a valid URL.')),
+              );
             }
           },
           child: const Text('Save to Rememdo',

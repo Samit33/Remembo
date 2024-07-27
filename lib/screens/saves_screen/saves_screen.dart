@@ -50,7 +50,7 @@ class _SavesScreenState extends State<SavesScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(firestore: widget.firestore),
     );
   }
 }

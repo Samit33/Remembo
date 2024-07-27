@@ -22,7 +22,7 @@ class _SavedItemsListState extends State<SavedItemsList> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: widget.firestore.collection('user1').snapshots(),
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
@@ -31,11 +31,23 @@ class _SavedItemsListState extends State<SavedItemsList> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final filteredDocs = snapshot.data!.docs.where((doc) {
-          final data = doc.data() as Map;
-          final title = (data['title'] ?? '').toLowerCase();
-          final tags = List.from(data['overallTags'] ?? [])
-              .map((tag) => tag.toLowerCase())
+        final allDocs = snapshot.data!.docs;
+        final processingDocs = allDocs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>?;
+          return data?['status'] == 'processing';
+        }).toList();
+        final completedDocs = allDocs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>?;
+          return data?['status'] == 'completed' || data?['status'] == null;
+        }).toList();
+
+        final filteredDocs = completedDocs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>?;
+          if (data == null) return false;
+
+          final title = (data['title'] as String? ?? '').toLowerCase();
+          final tags = (data['overallTags'] as List<dynamic>? ?? [])
+              .map((tag) => (tag as String).toLowerCase())
               .toList();
           final query = widget.searchQuery.toLowerCase();
 
@@ -45,11 +57,18 @@ class _SavedItemsListState extends State<SavedItemsList> {
 
         return ListView(
           padding: const EdgeInsets.all(16),
-          children: filteredDocs.map((doc) {
-            if (doc.id != 'collections') {
-              Map data = doc.data() as Map;
-              List allTags = List.from(data['overallTags'] ?? []);
-              List displayTags = _getShortestTags(allTags, 3);
+          children: [
+            if (processingDocs.isNotEmpty)
+              _buildProcessingCards(processingDocs),
+            ...filteredDocs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>?;
+              if (data == null || doc.id == 'collections') {
+                return Container();
+              }
+
+              final allTags =
+                  (data['overallTags'] as List<dynamic>? ?? []).cast<String>();
+              final displayTags = _getShortestTags(allTags, 3);
 
               return GestureDetector(
                 onTap: () {
@@ -58,24 +77,66 @@ class _SavedItemsListState extends State<SavedItemsList> {
                 },
                 child: SavedItem(
                   itemId: doc.id,
-                  title: data['title'] ?? 'No Title',
+                  title: data['title'] as String? ?? 'No Title',
                   tags: displayTags,
-                  initialActiveState: data['isActive'] ?? true,
+                  initialActiveState: data['isActive'] as bool? ?? true,
                   onToggle: (bool newState) {
                     doc.reference.update({'isActive': newState});
                   },
                 ),
               );
-            } else {
-              return Container(); // Return an empty container for 'collections' document
-            }
-          }).toList(),
+            }),
+          ],
         );
       },
     );
   }
 
-  List _getShortestTags(List tags, int count) {
+  Widget _buildProcessingCards(List<QueryDocumentSnapshot> processingDocs) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Processing',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        ...processingDocs.map((doc) => _buildProcessingCard(doc)),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildProcessingCard(QueryDocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>?;
+    final url = data?['url'] as String? ?? 'Unknown URL';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              'Processing $url',
+              style: const TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<String> _getShortestTags(List<String> tags, int count) {
     if (tags.length <= count) return tags;
 
     tags.sort((a, b) => a.length.compareTo(b.length));
