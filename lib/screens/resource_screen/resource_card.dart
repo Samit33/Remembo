@@ -7,12 +7,12 @@ class ResourceCard extends StatelessWidget {
   final List<String> tags;
 
   const ResourceCard({
-    super.key,
+    Key? key,
     required this.title,
     required this.description,
     required this.imageUrl,
     required this.tags,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,41 +25,15 @@ class ResourceCard extends StatelessWidget {
               imageUrl,
               fit: BoxFit.cover,
               width: double.infinity,
-              height: 200,
+              height: 150,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
                   width: double.infinity,
-                  height: 200,
+                  height: 150,
                   color: Colors.grey[300],
                   child: const Icon(Icons.error, color: Colors.red),
                 );
               },
-            ),
-            Positioned(
-              top: 10,
-              left: 10,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text('www.resourcelink.com'),
-              ),
             ),
           ],
         ),
@@ -76,14 +50,6 @@ class ResourceCard extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(
-                description,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: Colors.grey[600]),
-              ),
-              const SizedBox(height: 12),
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,
@@ -91,7 +57,7 @@ class ResourceCard extends StatelessWidget {
                     .map((tag) => Chip(
                           label: Text(tag),
                           backgroundColor: Colors.green[100],
-                          labelStyle: TextStyle(color: Colors.green[800]),
+                          labelStyle: TextStyle(color: Colors.blue[800]),
                         ))
                     .toList(),
               ),

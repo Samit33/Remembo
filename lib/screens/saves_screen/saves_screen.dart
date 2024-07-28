@@ -29,7 +29,8 @@ class _SavesScreenState extends State<SavesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
-      body: Column(
+      body: 
+      Column(
         children: [
           SearchBarCustom(onSearch: _updateSearchQuery),
           Expanded(
