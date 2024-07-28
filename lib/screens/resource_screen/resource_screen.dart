@@ -6,7 +6,7 @@ import 'progress_timeline.dart';
 class ResourceScreen extends StatelessWidget {
   final String docId;
 
-  const ResourceScreen({Key? key, required this.docId}) : super(key: key);
+  const ResourceScreen({super.key, required this.docId});
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +75,11 @@ class ResourceScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: const Text('Start'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       minimumSize: const Size(double.infinity, 50),
                     ),
+                    child: const Text('Start'),
                   ),
                 ),
               ],

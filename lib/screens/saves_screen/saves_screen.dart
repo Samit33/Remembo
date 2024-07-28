@@ -27,25 +27,15 @@ class _SavesScreenState extends State<SavesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
       body: Column(
         children: [
-          const CategoryTabs(),
           SearchBarCustom(onSearch: _updateSearchQuery),
           Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: SavedItemsList(
-                firestore: widget.firestore,
-                searchQuery: _searchQuery,
-              ),
+            child: SavedItemsList(
+              firestore: widget.firestore,
+              searchQuery: _searchQuery,
             ),
           ),
         ],

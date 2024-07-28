@@ -1,9 +1,11 @@
         import 'package:flutter/material.dart';
-        import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;import 'dart:math' as math;
+        import 'dart:math' as math;
 
 import 'package:flutter_svg/svg.dart';
         
         class SavesallWidget extends StatefulWidget {
+  const SavesallWidget({super.key});
+
         @override
         _SavesallWidgetState createState() => _SavesallWidgetState();
         }
@@ -14,41 +16,41 @@ import 'package:flutter_svg/svg.dart';
         // Figma Flutter Generator SavesallWidget - FRAME - VERTICAL
         
         return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
         width: 390,
         height: 180,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(0),
             topRight: Radius.circular(0),
@@ -67,14 +69,14 @@ import 'package:flutter_svg/svg.dart';
           colors: [Color.fromRGBO(116, 113, 245, 1),Color.fromRGBO(63, 104, 249, 1)]
         ),
   )
-      ), SizedBox(height : 0),
+      ), const SizedBox(height : 0),
 Transform.rotate(
         angle: 4.992081012380488 * (math.pi / 180),
         child: SvgPicture.asset(
         'assets/images/path212.svg',
         semanticsLabel: 'path212'
       );,
-      ), SizedBox(height : 0),
+      ), const SizedBox(height : 0),
 SvgPicture.asset(
         'assets/images/path41533.svg',
         semanticsLabel: 'path41533'
@@ -186,33 +188,33 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 20),
+    ), const SizedBox(height : 20),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Text('Saves', textAlign: TextAlign.center, style: TextStyle(
+          const Text('Saves', textAlign: TextAlign.center, style: TextStyle(
         color: Color.fromRGBO(255, 255, 255, 1),
         fontFamily: 'Campton',
         fontSize: 22,
         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
         fontWeight: FontWeight.normal,
         height: 1
-      ),), SizedBox(width : 234),
-Container(
+      ),), const SizedBox(width : 234),
+SizedBox(
       width: 52,
       height: 52,
       
@@ -225,20 +227,20 @@ Container(
         width: 52,
         height: 52,
         decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(166, 171, 181, 0.3499999940395355),
           offset: Offset(0,35),
           blurRadius: 90
       )],
-      color : Color.fromRGBO(191, 183, 244, 1),
+      color : const Color.fromRGBO(191, 183, 244, 1),
       border : Border.all(
-          color: Color.fromRGBO(255, 255, 255, 1),
+          color: const Color.fromRGBO(255, 255, 255, 1),
           width: 1,
         ),
   )
@@ -250,22 +252,22 @@ Container(
         width: 52,
         height: 52,
         decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(166, 171, 181, 0.3499999940395355),
           offset: Offset(0,35),
           blurRadius: 90
       )],
       border : Border.all(
-          color: Color.fromRGBO(255, 255, 255, 1),
+          color: const Color.fromRGBO(255, 255, 255, 1),
           width: 1,
         ),
-      image : DecorationImage(
+      image : const DecorationImage(
           image: AssetImage('assets/images/Rectangle4156.png'),
           fit: BoxFit.fitWidth
       ),
@@ -278,21 +280,21 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 20),
+    ), const SizedBox(height : 20),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -323,23 +325,23 @@ Text('Collections', textAlign: TextAlign.left, style: TextStyle(
 
         ],
       ),
-    ), SizedBox(height : 8),
+    ), const SizedBox(height : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
         width: 50,
         height: 3,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
   )
-      ), SizedBox(height : 0),
-Divider(
+      ), const SizedBox(height : 0),
+const Divider(
         color: Color.fromRGBO(255, 255, 255, 1),
         thickness: 1
       )
@@ -355,57 +357,57 @@ Divider(
     ),
 ],
       ),
-    ), SizedBox(height : 20),
+    ), const SizedBox(height : 20),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(233, 231, 252, 1),
+          color: const Color.fromRGBO(233, 231, 252, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -425,9 +427,9 @@ Text('Search...', textAlign: TextAlign.left, style: TextStyle(
 
         ],
       ),
-    ), SizedBox(width : 208),
+    ), const SizedBox(width : 208),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(12),
             topRight: Radius.circular(12),
@@ -441,8 +443,8 @@ Container(
       )],
       color : Color.fromRGBO(52, 181, 81, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -457,81 +459,81 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 20),
+    ), const SizedBox(height : 20),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(108, 86, 242, 0.10000000149011612),
           offset: Offset(0,4),
           blurRadius: 30
       )],
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(241, 242, 242, 1),
+          color: const Color.fromRGBO(241, 242, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Text('Predicting 2024 AI Trends: Game Development', textAlign: TextAlign.left, style: TextStyle(
+          const Text('Predicting 2024 AI Trends: Game Development', textAlign: TextAlign.left, style: TextStyle(
         color: Color.fromRGBO(31, 31, 31, 1),
         fontFamily: 'Campton',
         fontSize: 16,
         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
         fontWeight: FontWeight.normal,
         height: 1.5
-      ),), SizedBox(width : 52),
+      ),), const SizedBox(width : 52),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(60),
             topRight: Radius.circular(60),
@@ -550,7 +552,7 @@ Container(
           colors: [Color.fromRGBO(116, 113, 245, 1),Color.fromRGBO(63, 104, 249, 1)]
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
@@ -558,7 +560,7 @@ Container(
           Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
       borderRadius : BorderRadius.all(Radius.elliptical(18, 18)),
   )
@@ -570,13 +572,13 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 8),
+    ), const SizedBox(height : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -594,35 +596,35 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 15),
-Divider(
+    ), const SizedBox(height : 15),
+const Divider(
         color: Color.fromRGBO(240, 235, 228, 1),
         thickness: 1
       )
       ,
 ],
       ),
-    ), SizedBox(height : 10),
+    ), const SizedBox(height : 10),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -631,8 +633,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -647,9 +649,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -658,8 +660,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -674,9 +676,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -685,8 +687,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -705,23 +707,23 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 62),
+    ), const SizedBox(width : 62),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(227, 224, 242, 1),
+          color: const Color.fromRGBO(227, 224, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 11),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -739,73 +741,73 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 15),
+    ), const SizedBox(height : 15),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(108, 86, 242, 0.10000000149011612),
           offset: Offset(0,4),
           blurRadius: 30
       )],
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(241, 242, 242, 1),
+          color: const Color.fromRGBO(241, 242, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
+          const Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
         color: Color.fromRGBO(31, 31, 31, 1),
         fontFamily: 'Campton',
         fontSize: 16,
         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
         fontWeight: FontWeight.normal,
         height: 1.5
-      ),), SizedBox(width : 52),
+      ),), const SizedBox(width : 52),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(60),
             topRight: Radius.circular(60),
@@ -824,7 +826,7 @@ Container(
           colors: [Color.fromRGBO(116, 113, 245, 1),Color.fromRGBO(63, 104, 249, 1)]
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
@@ -832,7 +834,7 @@ Container(
           Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
       borderRadius : BorderRadius.all(Radius.elliptical(18, 18)),
   )
@@ -844,13 +846,13 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 8),
+    ), const SizedBox(height : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -868,35 +870,35 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 15),
-Divider(
+    ), const SizedBox(height : 15),
+const Divider(
         color: Color.fromRGBO(240, 235, 228, 1),
         thickness: 1
       )
       ,
 ],
       ),
-    ), SizedBox(height : 10),
+    ), const SizedBox(height : 10),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -905,8 +907,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -921,9 +923,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -932,8 +934,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -948,9 +950,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -959,8 +961,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -979,23 +981,23 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 62),
+    ), const SizedBox(width : 62),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(227, 224, 242, 1),
+          color: const Color.fromRGBO(227, 224, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 11),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1013,73 +1015,73 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 15),
+    ), const SizedBox(height : 15),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(108, 86, 242, 0.10000000149011612),
           offset: Offset(0,4),
           blurRadius: 30
       )],
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(241, 242, 242, 1),
+          color: const Color.fromRGBO(241, 242, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
+          const Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
         color: Color.fromRGBO(31, 31, 31, 1),
         fontFamily: 'Campton',
         fontSize: 16,
         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
         fontWeight: FontWeight.normal,
         height: 1.5
-      ),), SizedBox(width : 46),
+      ),), const SizedBox(width : 46),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(60),
             topRight: Radius.circular(60),
@@ -1098,7 +1100,7 @@ Container(
           colors: [Color.fromRGBO(116, 113, 245, 1),Color.fromRGBO(63, 104, 249, 1)]
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
@@ -1106,7 +1108,7 @@ Container(
           Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
       borderRadius : BorderRadius.all(Radius.elliptical(18, 18)),
   )
@@ -1118,13 +1120,13 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 3),
+    ), const SizedBox(height : 3),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1142,35 +1144,35 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 12),
-Divider(
+    ), const SizedBox(height : 12),
+const Divider(
         color: Color.fromRGBO(241, 235, 229, 1),
         thickness: 1
       )
       ,
 ],
       ),
-    ), SizedBox(height : 10),
+    ), const SizedBox(height : 10),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -1179,8 +1181,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1195,9 +1197,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -1206,8 +1208,8 @@ Container(
           ),
       color : Color.fromRGBO(238, 255, 241, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1226,23 +1228,23 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 154),
+    ), const SizedBox(width : 154),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(227, 224, 242, 1),
+          color: const Color.fromRGBO(227, 224, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 11),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1260,73 +1262,73 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 15),
+    ), const SizedBox(height : 15),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-      boxShadow : [BoxShadow(
+      boxShadow : const [BoxShadow(
           color: Color.fromRGBO(108, 86, 242, 0.10000000149011612),
           offset: Offset(0,4),
           blurRadius: 30
       )],
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(241, 242, 242, 1),
+          color: const Color.fromRGBO(241, 242, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
+          const Text('Basics of indoor gardening', textAlign: TextAlign.left, style: TextStyle(
         color: Color.fromRGBO(31, 31, 31, 1),
         fontFamily: 'Campton',
         fontSize: 16,
         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
         fontWeight: FontWeight.normal,
         height: 1.5
-      ),), SizedBox(width : 46),
+      ),), const SizedBox(width : 46),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(60),
             topRight: Radius.circular(60),
@@ -1345,7 +1347,7 @@ Container(
           colors: [Color.fromRGBO(116, 113, 245, 1),Color.fromRGBO(63, 104, 249, 1)]
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
@@ -1353,7 +1355,7 @@ Container(
           Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
       borderRadius : BorderRadius.all(Radius.elliptical(18, 18)),
   )
@@ -1365,13 +1367,13 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 3),
+    ), const SizedBox(height : 3),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1389,35 +1391,35 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 12),
-Divider(
+    ), const SizedBox(height : 12),
+const Divider(
         color: Color.fromRGBO(241, 235, 229, 1),
         thickness: 1
       )
       ,
 ],
       ),
-    ), SizedBox(height : 10),
+    ), const SizedBox(height : 10),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
           Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -1426,8 +1428,8 @@ Container(
           ),
       color : Color.fromRGBO(255, 241, 246, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1442,9 +1444,9 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 8),
+    ), const SizedBox(width : 8),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
@@ -1453,8 +1455,8 @@ Container(
           ),
       color : Color.fromRGBO(255, 241, 246, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
@@ -1473,22 +1475,22 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 154),
+    ), const SizedBox(width : 154),
 Container(
       decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
+          borderRadius : const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-      color : Color.fromRGBO(255, 255, 255, 1),
+      color : const Color.fromRGBO(255, 255, 255, 1),
       border : Border.all(
-          color: Color.fromRGBO(227, 224, 242, 1),
+          color: const Color.fromRGBO(227, 224, 242, 1),
           width: 1,
         ),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 11),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
@@ -1496,7 +1498,7 @@ Container(
           Container(
       width: 18,
       height: 18,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
   ),
       child: Stack(
@@ -1504,7 +1506,7 @@ Container(
           Positioned(
         top: 1.125,
         left: 1.125,
-        child: Container(
+        child: SizedBox(
       width: 15.75,
       height: 15.75,
       
@@ -1551,9 +1553,9 @@ Container(
     ),
 ],
       ),
-    ), SizedBox(height : 20),
+    ), const SizedBox(height : 20),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius : BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -1567,32 +1569,32 @@ Container(
       )],
       color : Color.fromRGBO(52, 181, 81, 1),
   ),
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          null, SizedBox(width : 61),
-null, SizedBox(width : 61),
-null, SizedBox(width : 61),
+          null, const SizedBox(width : 61),
+null, const SizedBox(width : 61),
+null, const SizedBox(width : 61),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Container(
+          SizedBox(
       width: 60,
       height: 56,
       
@@ -1608,8 +1610,8 @@ Container(
       ),
         ]
       )
-    ), SizedBox(width : 10),
-Container(
+    ), const SizedBox(width : 10),
+SizedBox(
       width: 30,
       height: 30,
       
@@ -1618,7 +1620,7 @@ Container(
           Positioned(
         top: 0,
         left: 0,
-        child: Container(
+        child: SizedBox(
       width: 30,
       height: 30,
       
@@ -1665,11 +1667,11 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 61),
+    ), const SizedBox(width : 61),
 Container(
         width: 6,
         height: 6,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow : [BoxShadow(
           color: Color.fromRGBO(0, 0, 0, 0.25),
           offset: Offset(0,4),
@@ -1682,17 +1684,17 @@ Container(
 
         ],
       ),
-    ), SizedBox(height : 10),
+    ), const SizedBox(height : 10),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Container(
+          SizedBox(
       width: 24,
       height: 24,
       
@@ -1722,8 +1724,8 @@ Container(
       ),
         ]
       )
-    ), SizedBox(width : 61),
-Container(
+    ), const SizedBox(width : 61),
+SizedBox(
       width: 24,
       height: 24,
       
@@ -1732,7 +1734,7 @@ Container(
           Positioned(
         top: 0,
         left: 0,
-        child: Container(
+        child: SizedBox(
       width: 24,
       height: 24,
       
@@ -1769,8 +1771,8 @@ Container(
       ),
         ]
       )
-    ), SizedBox(width : 61),
-Container(
+    ), const SizedBox(width : 61),
+SizedBox(
       width: 24,
       height: 24,
       
@@ -1779,7 +1781,7 @@ Container(
           Positioned(
         top: 0,
         left: 0,
-        child: Container(
+        child: SizedBox(
       width: 24,
       height: 24,
       
@@ -1820,17 +1822,17 @@ Container(
       ),
         ]
       )
-    ), SizedBox(width : 61),
+    ), const SizedBox(width : 61),
 Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           
   ),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         
         children: <Widget>[
-          Container(
+          SizedBox(
       width: 60,
       height: 56,
       
@@ -1846,8 +1848,8 @@ Container(
       ),
         ]
       )
-    ), SizedBox(width : 10),
-Container(
+    ), const SizedBox(width : 10),
+SizedBox(
       width: 30,
       height: 30,
       
@@ -1856,7 +1858,7 @@ Container(
           Positioned(
         top: 0,
         left: 0,
-        child: Container(
+        child: SizedBox(
       width: 30,
       height: 30,
       
@@ -1903,11 +1905,11 @@ Container(
 
         ],
       ),
-    ), SizedBox(width : 61),
+    ), const SizedBox(width : 61),
 Container(
         width: 6,
         height: 6,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow : [BoxShadow(
           color: Color.fromRGBO(0, 0, 0, 0.25),
           offset: Offset(0,4),

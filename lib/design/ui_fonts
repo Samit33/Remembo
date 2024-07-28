@@ -1,0 +1,22 @@
+class UIFonts{
+  static const String fontRegular = 'assets/fonts/regular.ttf';
+  static const String fontBold = 'assets/fonts/bold.ttf';
+  static const String fontItalic = 'assets/fonts/italic.ttf';
+
+  static const TextStyle regularTextStyle = TextStyle(
+    fontFamily: fontRegular,
+    fontWeight: FontWeight.normal,
+  );
+
+  static const TextStyle boldTextStyle = TextStyle(
+    fontFamily: fontBold,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const TextStyle italicTextStyle = TextStyle(
+    fontFamily: fontItalic,
+    fontStyle: FontStyle.italic,
+  );
+
+
+}

@@ -7,12 +7,12 @@ class ResourceCard extends StatelessWidget {
   final List<String> tags;
 
   const ResourceCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.imageUrl,
     required this.tags,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ResourceCard extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   color: Colors.grey[300],
-                  child: Icon(Icons.error, color: Colors.red),
+                  child: const Icon(Icons.error, color: Colors.red),
                 );
               },
             ),
@@ -44,7 +44,7 @@ class ResourceCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  icon: const Icon(Icons.arrow_back, color: Colors.black),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
@@ -53,12 +53,12 @@ class ResourceCard extends StatelessWidget {
               top: 10,
               right: 10,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text('www.resourcelink.com'),
+                child: const Text('www.resourcelink.com'),
               ),
             ),
           ],
@@ -75,7 +75,7 @@ class ResourceCard extends StatelessWidget {
                     .headlineSmall
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 description,
                 style: Theme.of(context)
@@ -83,7 +83,7 @@ class ResourceCard extends StatelessWidget {
                     .titleMedium
                     ?.copyWith(color: Colors.grey[600]),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,

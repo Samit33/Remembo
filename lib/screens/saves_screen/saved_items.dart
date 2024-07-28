@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_values.dart';
 import 'add_to_collection_dialog.dart';
 
 class SavedItemsList extends StatefulWidget {
@@ -8,10 +10,10 @@ class SavedItemsList extends StatefulWidget {
   final String searchQuery;
 
   const SavedItemsList({
-    Key? key,
+    super.key,
     required this.firestore,
     required this.searchQuery,
-  }) : super(key: key);
+  });
 
   @override
   _SavedItemsListState createState() => _SavedItemsListState();
@@ -152,13 +154,13 @@ class SavedItem extends StatefulWidget {
   final String itemId;
 
   const SavedItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.tags,
     required this.initialActiveState,
     required this.onToggle,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   _SavedItemState createState() => _SavedItemState();
@@ -180,15 +182,8 @@ class _SavedItemState extends State<SavedItem> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 1),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
+        boxShadow: const [UIColors.dropShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,15 +246,15 @@ class _SavedItemState extends State<SavedItem> {
   Widget _buildTag(String tag) {
     return Container(
       margin: const EdgeInsets.all(2),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1EFFE),
-        borderRadius: BorderRadius.circular(7),
+        color: UIColors.secondaryBGColor,
+        borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
       ),
       child: Text(
         tag,
         style: const TextStyle(
-          color: Color(0xFF6C56F2),
+          color: UIColors.secondaryColor,
           fontSize: 12,
         ),
       ),
