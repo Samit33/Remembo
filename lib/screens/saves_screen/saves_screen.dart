@@ -27,9 +27,10 @@ class _SavesScreenState extends State<SavesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
-      body: Column(
+      body: 
+      Column(
         children: [
           const CategoryTabs(),
           SearchBarCustom(onSearch: _updateSearchQuery),

@@ -11,6 +11,7 @@ class ResourceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Resource Screen')),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user1')
@@ -31,7 +32,6 @@ class ResourceScreen extends StatelessWidget {
 
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-
           String title = data['title'] ?? 'No Title';
           String description = data['description'] ?? 'No Description';
           String imageUrl = data['imageUrl'] ?? '';
@@ -39,14 +39,12 @@ class ResourceScreen extends StatelessWidget {
               (data['tags'] as List?)?.map((tag) => tag as String).toList() ??
                   [];
 
-          // Process section titles with identifiers
           List<Map<String, dynamic>> cards =
               (data['learning_cards']?['args']?['cards'] as List?)
                       ?.map((card) => card as Map<String, dynamic>)
                       .toList() ??
                   [];
 
-          // Sort cards by section_identifier and remove duplicates
           cards.sort((a, b) => (a['section_identifier'] as num)
               .compareTo(b['section_identifier'] as num));
 
@@ -54,10 +52,10 @@ class ResourceScreen extends StatelessWidget {
           Set<String> seenTitles = {};
 
           for (var card in cards) {
-            String title = card['section_title'] as String;
-            if (!seenTitles.contains(title)) {
-              uniqueSectionTitles.add(title);
-              seenTitles.add(title);
+            String sectionTitle = card['section_title'] as String;
+            if (!seenTitles.contains(sectionTitle)) {
+              uniqueSectionTitles.add(sectionTitle);
+              seenTitles.add(sectionTitle);
             }
           }
 
@@ -70,22 +68,24 @@ class ResourceScreen extends StatelessWidget {
                   imageUrl: imageUrl,
                   tags: tags,
                 ),
-                ProgressTimeline(sectionTitles: uniqueSectionTitles),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Start'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                  ),
+                ProgressTimeline(
+                  sectionTitles: uniqueSectionTitles,
+                  docId: docId,
                 ),
               ],
             ),
           );
         },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {},
+          child: const Text('Start'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+          ),
+        ),
       ),
     );
   }
