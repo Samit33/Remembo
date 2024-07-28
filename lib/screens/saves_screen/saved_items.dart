@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/design/animated_button';
 import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_icons.dart';
 import 'package:myapp/design/ui_values.dart';
 import 'add_to_collection_dialog.dart';
 
@@ -209,7 +211,7 @@ class _SavedItemState extends State<SavedItem> {
                   });
                   widget.onToggle(value);
                 },
-                activeColor: const Color(0xFF6C56F2),
+                activeColor: UIColors.primaryColor,
               ),
             ],
           ),
@@ -222,20 +224,28 @@ class _SavedItemState extends State<SavedItem> {
                       widget.tags.take(3).map((tag) => _buildTag(tag)).toList(),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
-                color: const Color(0xFF6C56F2),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AddToCollectionDialog(
-                      firestore: FirebaseFirestore.instance,
-                      userId: 'user1', // Replace with your actual user ID
-                      itemId: widget.itemId, // Replace with your actual item ID
+              AnimatedButton(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.circular(UiValues.defaultBorderRadius),
+                      boxShadow: const [UIColors.dropShadow],
                     ),
-                  ); // TODO: Implement add to collections functionality
-                },
-              ),
+                    child: Image.asset(UiAssets.addToCollectionIcon,
+                        width: 24, height: 24),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AddToCollectionDialog(
+                        firestore: FirebaseFirestore.instance,
+                        userId: 'user1', // Replace with your actual user ID
+                        itemId:
+                            widget.itemId, // Replace with your actual item ID
+                      ),
+                    ); // TODO: Implement add to collections functionality
+                  })
             ],
           ),
         ],
