@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/design/animated_button';
+import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_icons.dart';
+import 'package:myapp/design/ui_values.dart';
 
 class SearchBarCustom extends StatelessWidget {
   final Function(String) onSearch;
@@ -9,35 +13,43 @@ class SearchBarCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.deepPurple,
       child: Container(
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
+          boxShadow: const [UIColors.dropShadow],
         ),
         child: Row(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.search, color: Colors.grey),
+              child: Image.asset(UiAssets.searchIcon),
             ),
             Expanded(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search...',
                   border: InputBorder.none,
                 ),
                 onChanged: onSearch,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.filter_list, color: Colors.white),
+            AnimatedButton(
+              child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: UIColors.secondaryColor,
+                    borderRadius:
+                        BorderRadius.circular(UiValues.defaultBorderRadius),
+                  ),
+                  child: Image.asset(
+                    UiAssets.filterIcon,
+                    color: Colors.white,
+                  )),
+              onTap: () {
+                // Add your custom logic here
+              },
             ),
           ],
         ),

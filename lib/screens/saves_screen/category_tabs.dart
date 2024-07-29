@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/design/animated_button';
 
 class CategoryTabs extends StatefulWidget {
   const CategoryTabs({Key? key}) : super(key: key);
@@ -12,49 +13,60 @@ class _CategoryTabsState extends State<CategoryTabs> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.deepPurple,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          _buildTab('All', index: 0),
-          const SizedBox(width: 16),
-          _buildTab('Active', index: 1),
-          const SizedBox(width: 16),
-          _buildTab('Collections', index: 2),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildTab('All', index: 0),
+            _buildTab('Active', index: 1),
+            _buildTab('Collections', index: 2),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTab(String text, {required int index}) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _activeTabIndex = index;
-        });
-      },
-      child: Column(
-        children: [
-          Text(
-            text,
-            style: TextStyle(
-              color: _activeTabIndex == index
-                  ? Colors.white
-                  : Colors.white.withOpacity(0.6),
-              fontWeight: _activeTabIndex == index
-                  ? FontWeight.bold
-                  : FontWeight.normal,
+    final isActive = _activeTabIndex == index;
+
+    return Expanded(
+      child: AnimatedButton(
+        onTap: () {
+          setState(() {
+            _activeTabIndex = index;
+          });
+        },
+        child: Column(
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          if (_activeTabIndex == index)
-            Container(
-              height: 2,
-              width: 40,
-              color: Colors.white,
+            const SizedBox(height: 4),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 2,
+                  color: Colors.white.withOpacity(0.2), // Transparent underline
+                ),
+                if (isActive)
+                  Container(
+                    height: 2,
+                    alignment: Alignment.center,
+                    //width: 100,
+                    color: Colors.white, // Solid white underline for active tab
+                  ),
+              ],
             ),
-        ],
+          ],
+        ),
       ),
     );
   }

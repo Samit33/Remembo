@@ -7,11 +7,11 @@ class AddToCollectionDialog extends StatefulWidget {
   final String itemId;
 
   const AddToCollectionDialog({
-    Key? key,
+    super.key,
     required this.firestore,
     required this.userId,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   _AddToCollectionDialogState createState() => _AddToCollectionDialogState();

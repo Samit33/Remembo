@@ -7,8 +7,7 @@ class AddUrlDialog extends StatelessWidget {
   final Function(String) onSave;
   final FirebaseFirestore firestore;
 
-  const AddUrlDialog({Key? key, required this.onSave, required this.firestore})
-      : super(key: key);
+  const AddUrlDialog({super.key, required this.onSave, required this.firestore});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class AddUrlDialog extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'e.g. https://fs.blog/first-principles/',
           hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         onChanged: (value) {
           url = value;
@@ -63,7 +62,7 @@ class AddUrlDialog extends StatelessWidget {
                 print(
                     'Error triggering cloud function: ${response.statusCode}');
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                       content: Text('Error processing URL. Please try again.')),
                 );
               }
@@ -71,7 +70,7 @@ class AddUrlDialog extends StatelessWidget {
               // Handle invalid URL
               print('Invalid URL');
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                     content: Text('Invalid URL. Please enter a valid URL.')),
               );
             }

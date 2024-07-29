@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/design/animated_button';
+import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_icons.dart';
+import 'package:myapp/design/ui_values.dart';
 import 'add_to_collection_dialog.dart';
 
 class SavedItemsList extends StatefulWidget {
@@ -8,10 +12,10 @@ class SavedItemsList extends StatefulWidget {
   final String searchQuery;
 
   const SavedItemsList({
-    Key? key,
+    super.key,
     required this.firestore,
     required this.searchQuery,
-  }) : super(key: key);
+  });
 
   @override
   _SavedItemsListState createState() => _SavedItemsListState();
@@ -152,13 +156,13 @@ class SavedItem extends StatefulWidget {
   final String itemId;
 
   const SavedItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.tags,
     required this.initialActiveState,
     required this.onToggle,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   _SavedItemState createState() => _SavedItemState();
@@ -180,15 +184,8 @@ class _SavedItemState extends State<SavedItem> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 1),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
+        boxShadow: const [UIColors.dropShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +211,7 @@ class _SavedItemState extends State<SavedItem> {
                   });
                   widget.onToggle(value);
                 },
-                activeColor: const Color(0xFF6C56F2),
+                activeColor: UIColors.primaryColor,
               ),
             ],
           ),
@@ -227,20 +224,28 @@ class _SavedItemState extends State<SavedItem> {
                       widget.tags.take(3).map((tag) => _buildTag(tag)).toList(),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
-                color: const Color(0xFF6C56F2),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AddToCollectionDialog(
-                      firestore: FirebaseFirestore.instance,
-                      userId: 'user1', // Replace with your actual user ID
-                      itemId: widget.itemId, // Replace with your actual item ID
+              AnimatedButton(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.circular(UiValues.defaultBorderRadius),
+                      boxShadow: const [UIColors.dropShadow],
                     ),
-                  ); // TODO: Implement add to collections functionality
-                },
-              ),
+                    child: Image.asset(UiAssets.addToCollectionIcon,
+                        width: 24, height: 24),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AddToCollectionDialog(
+                        firestore: FirebaseFirestore.instance,
+                        userId: 'user1', // Replace with your actual user ID
+                        itemId:
+                            widget.itemId, // Replace with your actual item ID
+                      ),
+                    ); // TODO: Implement add to collections functionality
+                  })
             ],
           ),
         ],
@@ -251,15 +256,15 @@ class _SavedItemState extends State<SavedItem> {
   Widget _buildTag(String tag) {
     return Container(
       margin: const EdgeInsets.all(2),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1EFFE),
-        borderRadius: BorderRadius.circular(7),
+        color: UIColors.secondaryBGColor,
+        borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
       ),
       child: Text(
         tag,
         style: const TextStyle(
-          color: Color(0xFF6C56F2),
+          color: UIColors.secondaryColor,
           fontSize: 12,
         ),
       ),

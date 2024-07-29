@@ -159,7 +159,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   Widget _buildNavItem(int index) {
-    return GestureDetector(
+    return AnimatedButton(
         onTap: () => _onItemTapped(index),
         child: Image.asset(
           get_icon(index),
@@ -170,25 +170,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
     switch (index) {
       case 0:
         return _selectedIndex == index
-            ? UiIcons.homeIconSelected
-            : UiIcons.homeIconNormal;
+            ? UiAssets.homeIconSelected
+            : UiAssets.homeIconNormal;
       case 1:
         return _selectedIndex == index
-            ? UiIcons.savesIconSelected
-            : UiIcons.savesIconNormal;
+            ? UiAssets.savesIconSelected
+            : UiAssets.savesIconNormal;
       case 2:
         return _selectedIndex == index
-            ? UiIcons.infoIconSelected
-            : UiIcons.infoIconNormal;
+            ? UiAssets.infoIconSelected
+            : UiAssets.infoIconNormal;
       default:
-        return UiIcons.homeIconNormal;
+        return UiAssets.homeIconNormal;
     }
   }
 
   Widget _buildAddButton(BuildContext context) {
     return AnimatedButton(
         onTap: () => _onItemTapped(3),
-        child: Image.asset(UiIcons.addIcon, width: 40, height: 40)
+        child: Image.asset(UiAssets.addIcon, width: 40, height: 40)
 
         // Container(
         //   padding: const EdgeInsets.all(12),
