@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'quiz_card.dart';
 
 class ReviewCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
+  final Function onReviewComplete;
 
-  const ReviewCard({Key? key, required this.docId, required this.sectionTitle})
-      : super(key: key);
+  const ReviewCard({
+    Key? key,
+    required this.docId,
+    required this.sectionTitle,
+    required this.onReviewComplete,
+  }) : super(key: key);
 
   @override
   _ReviewCardState createState() => _ReviewCardState();
@@ -16,6 +22,7 @@ class ReviewCard extends StatefulWidget {
 class _ReviewCardState extends State<ReviewCard> {
   bool showAnswer = false;
   int currentCardIndex = 0;
+  List<Map<String, dynamic>> reviewCards = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +54,14 @@ class _ReviewCardState extends State<ReviewCard> {
 
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-          List<Map<String, dynamic>> reviewCards =
+          reviewCards =
               (data['review_cards']?['args']?['review_cards'] as List?)
                       ?.map((card) => card as Map<String, dynamic>)
                       .toList() ??
                   [];
 
-          // Filter review cards for the current section
           reviewCards = reviewCards
-              .where((card) =>
-                  card['section_title'] ==
-                  widget.sectionTitle.replaceFirst('Review: ', ''))
+              .where((card) => card['section_title'] == widget.sectionTitle)
               .toList();
 
           if (reviewCards.isEmpty) {
@@ -133,15 +137,28 @@ class _ReviewCardState extends State<ReviewCard> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: currentCardIndex < reviewCards.length - 1
-                            ? () {
-                                setState(() {
-                                  currentCardIndex++;
-                                  showAnswer = false;
-                                });
-                              }
-                            : null,
-                        child: Text('Next'),
+                        onPressed: () {
+                          if (currentCardIndex < reviewCards.length - 1) {
+                            setState(() {
+                              currentCardIndex++;
+                              showAnswer = false;
+                            });
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuizCard(
+                                  docId: widget.docId,
+                                  sectionTitle: widget.sectionTitle,
+                                  onQuizComplete: widget.onReviewComplete,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Text(currentCardIndex < reviewCards.length - 1
+                            ? 'Next'
+                            : 'Take Quiz'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                         ),

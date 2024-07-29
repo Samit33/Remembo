@@ -4,9 +4,14 @@ import '../learning_screen/learning_card.dart';
 class ProgressTimeline extends StatelessWidget {
   final List<String> sectionTitles;
   final String docId;
+  final int currentSectionIndex;
 
-  const ProgressTimeline({Key? key, required this.sectionTitles, required this.docId})
-      : super(key: key);
+  const ProgressTimeline({
+    Key? key,
+    required this.sectionTitles,
+    required this.docId,
+    required this.currentSectionIndex,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,21 +20,24 @@ class ProgressTimeline extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: sectionTitles.length,
       itemBuilder: (context, index) {
-        bool isCompleted = index == 0;
-        bool isCurrent = index == 1;
+        bool isCompleted = index < currentSectionIndex;
+        bool isCurrent = index == currentSectionIndex;
 
         return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LearningCard(
-                  docId: docId,
-                  sectionTitle: sectionTitles[index],
-                ),
-              ),
-            );
-          },
+          onTap: isCurrent || isCompleted
+              ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LearningCard(
+                        docId: docId,
+                        sectionTitle: sectionTitles[index],
+                        onSectionComplete: () {},
+                      ),
+                    ),
+                  );
+                }
+              : null,
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
@@ -64,8 +72,9 @@ class ProgressTimeline extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(
-                              fontWeight:
-                                  isCurrent ? FontWeight.bold : FontWeight.normal,
+                              fontWeight: isCurrent
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),

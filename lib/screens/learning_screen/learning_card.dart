@@ -6,8 +6,14 @@ import 'review_card.dart';
 class LearningCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
+  final Function onSectionComplete;
 
-  const LearningCard({Key? key, required this.docId, required this.sectionTitle}) : super(key: key);
+  const LearningCard({
+    Key? key,
+    required this.docId,
+    required this.sectionTitle,
+    required this.onSectionComplete,
+  }) : super(key: key);
 
   @override
   _LearningCardState createState() => _LearningCardState();
@@ -45,13 +51,16 @@ class _LearningCardState extends State<LearningCard> {
             return Center(child: Text('No data available'));
           }
 
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
           cards = (data['learning_cards']?['args']?['cards'] as List?)
                   ?.map((card) => card as Map<String, dynamic>)
                   .toList() ??
               [];
 
-          cards = cards.where((card) => card['section_title'] == widget.sectionTitle).toList();
+          cards = cards
+              .where((card) => card['section_title'] == widget.sectionTitle)
+              .toList();
 
           if (cards.isEmpty) {
             return Center(child: Text('No cards found for this section'));
@@ -74,7 +83,8 @@ class _LearningCardState extends State<LearningCard> {
                   SizedBox(height: 16),
                   MarkdownBody(
                     data: content,
-                    styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                    styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
+                        .copyWith(
                       p: Theme.of(context).textTheme.bodyLarge,
                       h1: Theme.of(context).textTheme.headlineSmall,
                       h2: Theme.of(context).textTheme.titleLarge,
@@ -104,19 +114,21 @@ class _LearningCardState extends State<LearningCard> {
                               currentCardIndex++;
                             });
                           } else {
-                            // Navigate to ReviewCard when we're on the last learning card
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ReviewCard(
                                   docId: widget.docId,
-                                  sectionTitle: 'Review: ${widget.sectionTitle}',
+                                  sectionTitle: widget.sectionTitle,
+                                  onReviewComplete: widget.onSectionComplete,
                                 ),
                               ),
                             );
                           }
                         },
-                        child: Text(currentCardIndex < cards.length - 1 ? 'Next' : 'Start Review'),
+                        child: Text(currentCardIndex < cards.length - 1
+                            ? 'Next'
+                            : 'Start Review'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                         ),

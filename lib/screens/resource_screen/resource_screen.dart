@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'resource_card.dart';
 import 'progress_timeline.dart';
+import '../learning_screen/learning_card.dart';
+import '../learning_screen/quiz_card.dart';
 
-class ResourceScreen extends StatelessWidget {
+class ResourceScreen extends StatefulWidget {
   final String docId;
 
   const ResourceScreen({Key? key, required this.docId}) : super(key: key);
+
+  @override
+  _ResourceScreenState createState() => _ResourceScreenState();
+}
+
+class _ResourceScreenState extends State<ResourceScreen> {
+  int currentSectionIndex = 0;
+  bool allSectionsCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +25,7 @@ class ResourceScreen extends StatelessWidget {
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user1')
-            .doc(docId)
+            .doc(widget.docId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,7 +80,8 @@ class ResourceScreen extends StatelessWidget {
                 ),
                 ProgressTimeline(
                   sectionTitles: uniqueSectionTitles,
-                  docId: docId,
+                  currentSectionIndex: currentSectionIndex,
+                  docId: widget.docId,
                 ),
               ],
             ),
@@ -80,8 +91,39 @@ class ResourceScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
-          onPressed: () {},
-          child: const Text('Start'),
+          onPressed: () {
+            if (allSectionsCompleted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizCard(
+                    docId: widget.docId,
+                    sectionTitle: 'All Sections',
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LearningCard(
+                    docId: widget.docId,
+                    sectionTitle: '',
+                    onSectionComplete: () {
+                      setState(() {
+                        currentSectionIndex++;
+                        if (currentSectionIndex == 3) {
+                          // Assuming 3 sections
+                          allSectionsCompleted = true;
+                        }
+                      });
+                    },
+                  ),
+                ),
+              );
+            }
+          },
+          child: Text(allSectionsCompleted ? 'Take Quiz' : 'Start'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
           ),
