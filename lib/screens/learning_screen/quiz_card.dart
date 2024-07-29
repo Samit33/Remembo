@@ -73,8 +73,7 @@ class _QuizCardState extends State<QuizCard> {
 
           Map<String, dynamic> currentCard = quizCards[currentCardIndex];
           String question = currentCard['Q'] ?? 'No question available';
-          Map<String, String> choices =
-              Map<String, String>.from(currentCard['choices'] ?? {});
+          Map<String, dynamic> choices = Map.from(currentCard['choices'] ?? {});
           String correctAnswer = currentCard['correct_answer'] ?? '';
 
           return SingleChildScrollView(
@@ -96,7 +95,7 @@ class _QuizCardState extends State<QuizCard> {
                     ),
                   ),
                   SizedBox(height: 24),
-                  ...choices.entries.map((choice) => RadioListTile<String>(
+                  ...choices.entries.map((choice) => RadioListTile(
                         title: Text(choice.value),
                         value: choice.key,
                         groupValue: selectedAnswer,
@@ -166,7 +165,7 @@ class _QuizCardState extends State<QuizCard> {
                                         title: Text('Quiz Completed'),
                                         content: Text(
                                             'You got $correctAnswers out of ${quizCards.length} questions correct.'),
-                                        actions: <Widget>[
+                                        actions: [
                                           TextButton(
                                             child: Text('OK'),
                                             onPressed: () {
@@ -176,6 +175,18 @@ class _QuizCardState extends State<QuizCard> {
                                                   null) {
                                                 widget.onQuizComplete!();
                                               }
+                                              // Update user progress in Firebase
+                                              FirebaseFirestore.instance
+                                                  .collection('user1')
+                                                  .doc(widget.docId)
+                                                  .update({
+                                                'currentSectionIndex':
+                                                    FieldValue.increment(1),
+                                              });
+                                              // Navigate to Resource Screen
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/resource_screen',
+                                                  arguments: widget.docId);
                                             },
                                           ),
                                         ],
@@ -187,7 +198,7 @@ class _QuizCardState extends State<QuizCard> {
                             : null,
                         child: Text(currentCardIndex < quizCards.length - 1
                             ? 'Next'
-                            : 'Finish'),
+                            : 'Next Section'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                         ),

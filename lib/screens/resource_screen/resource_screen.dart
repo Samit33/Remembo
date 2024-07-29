@@ -19,6 +19,37 @@ class _ResourceScreenState extends State<ResourceScreen> {
   bool allSectionsCompleted = false;
 
   @override
+  void initState() {
+    super.initState();
+    _loadUserProgress();
+  }
+
+  void _loadUserProgress() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('user1')
+        .doc(widget.docId)
+        .get();
+
+    if (userDoc.exists) {
+      Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
+      setState(() {
+        currentSectionIndex = data['currentSectionIndex'] ?? 0;
+        allSectionsCompleted = data['allSectionsCompleted'] ?? false;
+      });
+    }
+  }
+
+  void _updateUserProgress() async {
+    await FirebaseFirestore.instance
+        .collection('user1')
+        .doc(widget.docId)
+        .update({
+      'currentSectionIndex': currentSectionIndex,
+      'allSectionsCompleted': allSectionsCompleted,
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Resource Screen')),
@@ -99,6 +130,9 @@ class _ResourceScreenState extends State<ResourceScreen> {
                   builder: (context) => QuizCard(
                     docId: widget.docId,
                     sectionTitle: 'All Sections',
+                    onQuizComplete: () {
+                      // Handle final quiz completion
+                    },
                   ),
                 ),
               );
@@ -116,6 +150,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
                           // Assuming 3 sections
                           allSectionsCompleted = true;
                         }
+                        _updateUserProgress();
                       });
                     },
                   ),
@@ -123,7 +158,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
               );
             }
           },
-          child: Text(allSectionsCompleted ? 'Take Quiz' : 'Start'),
+          child: Text(allSectionsCompleted ? 'Take Final Quiz' : 'Start'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
           ),
