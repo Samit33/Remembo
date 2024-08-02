@@ -6,7 +6,7 @@ import 'quiz_card.dart';
 class ReviewCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
-  final Function onReviewComplete;
+  final Function() onReviewComplete;
 
   const ReviewCard({
     Key? key,
@@ -72,6 +72,11 @@ class _ReviewCardState extends State<ReviewCard> {
           Map<String, dynamic> currentCard = reviewCards[currentCardIndex];
           String question = currentCard['Q'] ?? 'No question available';
           String answer = currentCard['A'] ?? 'No answer available';
+
+          // Convert section_identifier to int, handling potential double values
+          int sectionIdentifier = (currentCard['section_identifier'] is int)
+              ? currentCard['section_identifier']
+              : (currentCard['section_identifier'] as double).toInt();
 
           return SingleChildScrollView(
             child: Padding(
@@ -150,7 +155,10 @@ class _ReviewCardState extends State<ReviewCard> {
                                 builder: (context) => QuizCard(
                                   docId: widget.docId,
                                   sectionTitle: widget.sectionTitle,
-                                  onQuizComplete: widget.onReviewComplete,
+                                  onQuizComplete:
+                                      (score, quizSectionIdentifier) {
+                                    widget.onReviewComplete();
+                                  },
                                 ),
                               ),
                             );

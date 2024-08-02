@@ -17,6 +17,9 @@ class ResourceScreen extends StatefulWidget {
 class _ResourceScreenState extends State<ResourceScreen> {
   int currentSectionIndex = 0;
   bool allSectionsCompleted = false;
+  int totalSections = 0;
+  int correctAnswers = 0;
+  int totalQuestions = 0;
 
   @override
   void initState() {
@@ -32,20 +35,44 @@ class _ResourceScreenState extends State<ResourceScreen> {
 
     if (userDoc.exists) {
       Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
+      List<dynamic> quizCards =
+          data['quiz_cards']?['args']?['quiz_cards'] ?? [];
       setState(() {
         currentSectionIndex = data['currentSectionIndex'] ?? 0;
         allSectionsCompleted = data['allSectionsCompleted'] ?? false;
+        correctAnswers = data['correctAnswers'] ?? 0;
+        totalQuestions = quizCards.length;
       });
     }
   }
 
-  void _updateUserProgress() async {
+  void _updateUserProgress(int newSectionIndex) async {
+    if (newSectionIndex > currentSectionIndex) {
+      setState(() {
+        currentSectionIndex = newSectionIndex;
+        if (currentSectionIndex == totalSections) {
+          allSectionsCompleted = true;
+        }
+      });
+      await FirebaseFirestore.instance
+          .collection('user1')
+          .doc(widget.docId)
+          .update({
+        'currentSectionIndex': currentSectionIndex,
+        'allSectionsCompleted': allSectionsCompleted,
+      });
+    }
+  }
+
+  void _updateScore(int score) async {
+    setState(() {
+      correctAnswers += score;
+    });
     await FirebaseFirestore.instance
         .collection('user1')
         .doc(widget.docId)
         .update({
-      'currentSectionIndex': currentSectionIndex,
-      'allSectionsCompleted': allSectionsCompleted,
+      'correctAnswers': correctAnswers,
     });
   }
 
@@ -100,6 +127,8 @@ class _ResourceScreenState extends State<ResourceScreen> {
             }
           }
 
+          totalSections = uniqueSectionTitles.length;
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -114,53 +143,55 @@ class _ResourceScreenState extends State<ResourceScreen> {
                   currentSectionIndex: currentSectionIndex,
                   docId: widget.docId,
                 ),
+                SizedBox(height: 16),
+                Text(
+                  'Score: $correctAnswers / $totalQuestions',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
               ],
             ),
           );
         },
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            if (allSectionsCompleted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuizCard(
-                    docId: widget.docId,
-                    sectionTitle: 'All Sections',
-                    onQuizComplete: () {
-                      // Handle final quiz completion
-                    },
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              if (allSectionsCompleted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizCard(
+                      docId: widget.docId,
+                      sectionTitle: 'All Sections',
+                      onQuizComplete: (int score, int sectionIdentifier) {
+                        _updateScore(score);
+                        _updateUserProgress(sectionIdentifier);
+                      },
+                    ),
                   ),
-                ),
-              );
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LearningCard(
-                    docId: widget.docId,
-                    sectionTitle: '',
-                    onSectionComplete: () {
-                      setState(() {
-                        currentSectionIndex++;
-                        if (currentSectionIndex == 3) {
-                          // Assuming 3 sections
-                          allSectionsCompleted = true;
-                        }
-                        _updateUserProgress();
-                      });
-                    },
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LearningCard(
+                      docId: widget.docId,
+                      sectionTitle: '',
+                      onSectionComplete: (int sectionIdentifier) {
+                        _updateUserProgress(sectionIdentifier);
+                      },
+                    ),
                   ),
-                ),
-              );
-            }
-          },
-          child: Text(allSectionsCompleted ? 'Take Final Quiz' : 'Start'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
+                );
+              }
+            },
+            child: Text(allSectionsCompleted ? 'Revision Quiz' : 'Start'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              minimumSize: Size(double.infinity, 50),
+            ),
           ),
         ),
       ),

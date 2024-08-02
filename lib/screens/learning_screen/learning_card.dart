@@ -6,7 +6,7 @@ import 'review_card.dart';
 class LearningCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
-  final Function onSectionComplete;
+  final Function(int) onSectionComplete;
 
   const LearningCard({
     Key? key,
@@ -70,6 +70,11 @@ class _LearningCardState extends State<LearningCard> {
           String cardTitle = currentCard['card_title'] ?? 'No Title';
           String content = currentCard['content'] ?? 'No Content';
 
+          // Convert section_identifier to int, handling potential double values
+          int sectionIdentifier = (currentCard['section_identifier'] is int)
+              ? currentCard['section_identifier']
+              : (currentCard['section_identifier'] as double).toInt();
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -120,7 +125,9 @@ class _LearningCardState extends State<LearningCard> {
                                 builder: (context) => ReviewCard(
                                   docId: widget.docId,
                                   sectionTitle: widget.sectionTitle,
-                                  onReviewComplete: widget.onSectionComplete,
+                                  onReviewComplete: () {
+                                    widget.onSectionComplete(sectionIdentifier);
+                                  },
                                 ),
                               ),
                             );

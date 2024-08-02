@@ -32,7 +32,7 @@ class ProgressTimeline extends StatelessWidget {
                       builder: (context) => LearningCard(
                         docId: docId,
                         sectionTitle: sectionTitles[index],
-                        onSectionComplete: () {},
+                        onSectionComplete: (int sectionIndex) {},
                       ),
                     ),
                   );
@@ -78,8 +78,6 @@ class ProgressTimeline extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (isCurrent)
-                          Icon(Icons.refresh, color: Colors.green[800]),
                       ],
                     ),
                   ),
