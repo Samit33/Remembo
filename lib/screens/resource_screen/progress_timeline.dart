@@ -4,13 +4,13 @@ import '../learning_screen/learning_card.dart';
 class ProgressTimeline extends StatelessWidget {
   final List<String> sectionTitles;
   final String docId;
-  final int currentSectionIndex;
+  final int currentSectionIdentifier;
 
   const ProgressTimeline({
     Key? key,
     required this.sectionTitles,
     required this.docId,
-    required this.currentSectionIndex,
+    required this.currentSectionIdentifier,
   }) : super(key: key);
 
   @override
@@ -20,11 +20,14 @@ class ProgressTimeline extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: sectionTitles.length,
       itemBuilder: (context, index) {
-        bool isCompleted = index < currentSectionIndex;
-        bool isCurrent = index == currentSectionIndex;
+        bool isCurrent =
+            index == (currentSectionIdentifier - 1); // Updated condition
+        bool isCompleted = index <
+            (currentSectionIdentifier - 1); // New condition for completed cards
 
         return GestureDetector(
-          onTap: isCurrent || isCompleted
+          onTap: isCompleted |
+                  isCurrent // Updated to allow tap only on completed cards
               ? () {
                   Navigator.push(
                     context,
@@ -32,7 +35,6 @@ class ProgressTimeline extends StatelessWidget {
                       builder: (context) => LearningCard(
                         docId: docId,
                         sectionTitle: sectionTitles[index],
-                        onSectionComplete: (int sectionIndex) {},
                       ),
                     ),
                   );
@@ -47,13 +49,14 @@ class ProgressTimeline extends StatelessWidget {
                   height: 20,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCompleted || isCurrent
+                    color: isCompleted
                         ? Colors.green[800]
-                        : Colors.grey[300],
+                        : Colors.grey[300], // Updated color condition
                   ),
-                  child: isCompleted
-                      ? Icon(Icons.check, color: Colors.white, size: 14)
-                      : null,
+                  child:
+                      isCompleted // Updated to show tick only for completed cards
+                          ? Icon(Icons.check, color: Colors.white, size: 14)
+                          : null,
                 ),
                 SizedBox(width: 16),
                 Expanded(

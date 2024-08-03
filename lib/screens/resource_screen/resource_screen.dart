@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'resource_card.dart';
 import 'progress_timeline.dart';
-import '../learning_screen/learning_card.dart';
-import '../learning_screen/quiz_card.dart';
+import 'package:myapp/screens/saves_screen/bottom_navbar.dart'; // Add this import
 
 class ResourceScreen extends StatefulWidget {
   final String docId;
@@ -15,65 +14,36 @@ class ResourceScreen extends StatefulWidget {
 }
 
 class _ResourceScreenState extends State<ResourceScreen> {
-  int currentSectionIndex = 0;
-  bool allSectionsCompleted = false;
-  int totalSections = 0;
-  int correctAnswers = 0;
-  int totalQuestions = 0;
+  int currentSectionIdentifier = 1; // Default value
 
   @override
   void initState() {
     super.initState();
-    _loadUserProgress();
+    fetchCurrentSectionIdentifier();
   }
 
-  void _loadUserProgress() async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+  void fetchCurrentSectionIdentifier() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('user1')
         .doc(widget.docId)
         .get();
-
-    if (userDoc.exists) {
-      Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
-      List<dynamic> quizCards =
-          data['quiz_cards']?['args']?['quiz_cards'] ?? [];
-      setState(() {
-        currentSectionIndex = data['currentSectionIndex'] ?? 0;
-        allSectionsCompleted = data['allSectionsCompleted'] ?? false;
-        correctAnswers = data['correctAnswers'] ?? 0;
-        totalQuestions = quizCards.length;
-      });
+    if (snapshot.exists) {
+      var data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null && data['currentSectionIdentifier'] != null) {
+        setState(() {
+          currentSectionIdentifier = data['currentSectionIdentifier'];
+        });
+      } else {
+        // Create currentSectionIdentifier with value of 1
+        await FirebaseFirestore.instance
+            .collection('user1')
+            .doc(widget.docId)
+            .set({'currentSectionIdentifier': 1}, SetOptions(merge: true));
+        setState(() {
+          currentSectionIdentifier = 1;
+        });
+      }
     }
-  }
-
-  void _updateUserProgress(int newSectionIndex) async {
-    if (newSectionIndex > currentSectionIndex) {
-      setState(() {
-        currentSectionIndex = newSectionIndex;
-        if (currentSectionIndex == totalSections) {
-          allSectionsCompleted = true;
-        }
-      });
-      await FirebaseFirestore.instance
-          .collection('user1')
-          .doc(widget.docId)
-          .update({
-        'currentSectionIndex': currentSectionIndex,
-        'allSectionsCompleted': allSectionsCompleted,
-      });
-    }
-  }
-
-  void _updateScore(int score) async {
-    setState(() {
-      correctAnswers += score;
-    });
-    await FirebaseFirestore.instance
-        .collection('user1')
-        .doc(widget.docId)
-        .update({
-      'correctAnswers': correctAnswers,
-    });
   }
 
   @override
@@ -101,7 +71,6 @@ class _ResourceScreenState extends State<ResourceScreen> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
           String title = data['title'] ?? 'No Title';
-          String description = data['description'] ?? 'No Description';
           String imageUrl = data['imageUrl'] ?? '';
           List<String> tags =
               (data['tags'] as List?)?.map((tag) => tag as String).toList() ??
@@ -127,74 +96,27 @@ class _ResourceScreenState extends State<ResourceScreen> {
             }
           }
 
-          totalSections = uniqueSectionTitles.length;
-
           return SingleChildScrollView(
             child: Column(
               children: [
                 ResourceCard(
                   title: title,
-                  description: description,
                   imageUrl: imageUrl,
                   tags: tags,
                 ),
                 ProgressTimeline(
                   sectionTitles: uniqueSectionTitles,
-                  currentSectionIndex: currentSectionIndex,
+                  currentSectionIdentifier: currentSectionIdentifier,
                   docId: widget.docId,
                 ),
                 SizedBox(height: 16),
-                Text(
-                  'Score: $correctAnswers / $totalQuestions',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
               ],
             ),
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              if (allSectionsCompleted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuizCard(
-                      docId: widget.docId,
-                      sectionTitle: 'All Sections',
-                      onQuizComplete: (int score, int sectionIdentifier) {
-                        _updateScore(score);
-                        _updateUserProgress(sectionIdentifier);
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LearningCard(
-                      docId: widget.docId,
-                      sectionTitle: '',
-                      onSectionComplete: (int sectionIdentifier) {
-                        _updateUserProgress(sectionIdentifier);
-                      },
-                    ),
-                  ),
-                );
-              }
-            },
-            child: Text(allSectionsCompleted ? 'Revision Quiz' : 'Start'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              minimumSize: Size(double.infinity, 50),
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar:
+          BottomNavBar(firestore: FirebaseFirestore.instance), // Add this line
     );
   }
 }

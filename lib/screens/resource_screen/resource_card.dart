@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class ResourceCard extends StatelessWidget {
   final String title;
-  final String description;
   final String imageUrl;
   final List<String> tags;
 
   const ResourceCard({
     Key? key,
     required this.title,
-    required this.description,
     required this.imageUrl,
     required this.tags,
   }) : super(key: key);

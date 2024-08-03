@@ -6,14 +6,17 @@ import 'quiz_card.dart';
 class ReviewCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
-  final Function() onReviewComplete;
+  final int sectionIdentifier;
+  // final Function() onReviewComplete;
 
-  const ReviewCard({
-    Key? key,
-    required this.docId,
-    required this.sectionTitle,
-    required this.onReviewComplete,
-  }) : super(key: key);
+  const ReviewCard(
+      {Key? key,
+      required this.docId,
+      required this.sectionTitle,
+      required this.sectionIdentifier
+      // required this.onReviewComplete,
+      })
+      : super(key: key);
 
   @override
   _ReviewCardState createState() => _ReviewCardState();
@@ -73,10 +76,10 @@ class _ReviewCardState extends State<ReviewCard> {
           String question = currentCard['Q'] ?? 'No question available';
           String answer = currentCard['A'] ?? 'No answer available';
 
-          // Convert section_identifier to int, handling potential double values
-          int sectionIdentifier = (currentCard['section_identifier'] is int)
-              ? currentCard['section_identifier']
-              : (currentCard['section_identifier'] as double).toInt();
+          // // Convert section_identifier to int, handling potential double values
+          // int sectionIdentifier = (currentCard['section_identifier'] is int)
+          //     ? currentCard['section_identifier']
+          //     : (currentCard['section_identifier'] as double).toInt();
 
           return SingleChildScrollView(
             child: Padding(
@@ -153,13 +156,14 @@ class _ReviewCardState extends State<ReviewCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => QuizCard(
-                                  docId: widget.docId,
-                                  sectionTitle: widget.sectionTitle,
-                                  onQuizComplete:
-                                      (score, quizSectionIdentifier) {
-                                    widget.onReviewComplete();
-                                  },
-                                ),
+                                    docId: widget.docId,
+                                    sectionTitle: widget.sectionTitle,
+                                    sectionIdentifier: widget.sectionIdentifier
+                                    // onQuizComplete:
+                                    //     (score, quizSectionIdentifier) {
+                                    //   widget.onReviewComplete();
+                                    // },
+                                    ),
                               ),
                             );
                           }

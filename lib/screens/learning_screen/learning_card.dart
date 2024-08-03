@@ -6,13 +6,13 @@ import 'review_card.dart';
 class LearningCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
-  final Function(int) onSectionComplete;
+  // final Function(int) onSectionComplete;
 
   const LearningCard({
     Key? key,
     required this.docId,
     required this.sectionTitle,
-    required this.onSectionComplete,
+    // required this.onSectionComplete,
   }) : super(key: key);
 
   @override
@@ -123,12 +123,13 @@ class _LearningCardState extends State<LearningCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ReviewCard(
-                                  docId: widget.docId,
-                                  sectionTitle: widget.sectionTitle,
-                                  onReviewComplete: () {
-                                    widget.onSectionComplete(sectionIdentifier);
-                                  },
-                                ),
+                                    docId: widget.docId,
+                                    sectionTitle: widget.sectionTitle,
+                                    sectionIdentifier: sectionIdentifier
+                                    // onReviewComplete: () {
+                                    //   widget.onSectionComplete(sectionIdentifier);
+                                    // },
+                                    ),
                               ),
                             );
                           }
