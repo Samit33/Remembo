@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'category_tabs.dart';
 import 'custom_app_bar.dart';
 import 'saved_items.dart';
 import 'search_bar.dart';
 import 'bottom_navbar.dart';
+import 'shared_url_handler.dart';
 
 class SavesScreen extends StatefulWidget {
   final FirebaseFirestore firestore;
@@ -37,7 +37,16 @@ class _SavesScreenState extends State<SavesScreen> {
         }
       }
     });
+
+    // Set up shared URL handling
+    // SharedUrlHandler.listenForSharedUrls(context);
   }
+
+  // @override
+  // void dispose() {
+  //   SharedUrlHandler.dispose();
+  //   super.dispose();
+  // }
 
   void _updateSearchQuery(String query) {
     setState(() {

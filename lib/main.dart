@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'screens/saves_screen/saves_screen.dart';
 import 'screens/resource_screen/resource_screen.dart';
+import 'screens/saves_screen/shared_url_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,10 +14,30 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Initialize SharedUrlHandler only once
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     SharedUrlHandler.listenForSharedUrls(context);
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   SharedUrlHandler.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
