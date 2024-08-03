@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'resource_card.dart';
 import 'progress_timeline.dart';
-import 'package:myapp/screens/saves_screen/bottom_navbar.dart'; // Add this import
+import 'package:myapp/screens/saves_screen/bottom_navbar.dart';
+import 'comprehensive_quiz_screen.dart'; // Add this import
 
 class ResourceScreen extends StatefulWidget {
   final String docId;
@@ -14,7 +15,10 @@ class ResourceScreen extends StatefulWidget {
 }
 
 class _ResourceScreenState extends State<ResourceScreen> {
-  int currentSectionIdentifier = 1; // Default value
+  int currentSectionIdentifier = 1;
+  int totalSections = 0;
+  int? quizScore;
+  int totalQuestions = 0;
 
   @override
   void initState() {
@@ -29,18 +33,22 @@ class _ResourceScreenState extends State<ResourceScreen> {
         .get();
     if (snapshot.exists) {
       var data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null && data['currentSectionIdentifier'] != null) {
+      if (data != null) {
         setState(() {
-          currentSectionIdentifier = data['currentSectionIdentifier'];
+          currentSectionIdentifier = data['currentSectionIdentifier'] ?? 1;
+          quizScore = data['quizScore'];
         });
       } else {
-        // Create currentSectionIdentifier with value of 1
         await FirebaseFirestore.instance
             .collection('user1')
             .doc(widget.docId)
-            .set({'currentSectionIdentifier': 1}, SetOptions(merge: true));
+            .set({
+          'currentSectionIdentifier': 1,
+          'quizScore': null // Explicitly set quizScore to null
+        }, SetOptions(merge: true));
         setState(() {
           currentSectionIdentifier = 1;
+          quizScore = null;
         });
       }
     }
@@ -96,6 +104,10 @@ class _ResourceScreenState extends State<ResourceScreen> {
             }
           }
 
+          totalSections = uniqueSectionTitles.length;
+          totalQuestions =
+              (data['quiz_cards']?['args']?['quiz_cards'] as List?)?.length ??
+                  0;
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -110,13 +122,34 @@ class _ResourceScreenState extends State<ResourceScreen> {
                   docId: widget.docId,
                 ),
                 SizedBox(height: 16),
+                if (currentSectionIdentifier > totalSections)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ComprehensiveQuizScreen(
+                            docId: widget.docId,
+                            totalQuestions: totalQuestions,
+                            onQuizComplete: (score) {
+                              setState(() {
+                                quizScore = score;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text('Take Comprehensive Quiz'),
+                  ),
+                if (quizScore != null)
+                  Text('Quiz Score: $quizScore/$totalQuestions'),
               ],
             ),
           );
         },
       ),
-      bottomNavigationBar:
-          BottomNavBar(firestore: FirebaseFirestore.instance), // Add this line
+      bottomNavigationBar: BottomNavBar(firestore: FirebaseFirestore.instance),
     );
   }
 }

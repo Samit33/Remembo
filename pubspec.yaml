@@ -41,6 +41,8 @@ dependencies:
   flutter_markdown: ^0.7.3
   http: ^1.2.2
   rxdart: ^0.28.0
+  validators: ^3.0.0
+  receive_sharing_intent: ^1.8.0
 
 dev_dependencies:
   flutter_test:

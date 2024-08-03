@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:validators/validators.dart' as validator;
 
 class AddUrlDialog extends StatelessWidget {
   final Function(String) onSave;
   final FirebaseFirestore firestore;
 
-  const AddUrlDialog({super.key, required this.onSave, required this.firestore});
+  const AddUrlDialog(
+      {super.key, required this.onSave, required this.firestore});
 
   @override
   Widget build(BuildContext context) {
@@ -37,30 +38,30 @@ class AddUrlDialog extends StatelessWidget {
             backgroundColor: Colors.green,
           ),
           onPressed: () async {
-            if (await canLaunchUrl(Uri.parse(url))) {
-              // Add the URL to Firestore with 'processing' status
-              await firestore.collection('user1').add({
-                'url': url,
-                'status': 'processing',
-                'timestamp': FieldValue.serverTimestamp(),
-              });
-
-              // Trigger the cloud function
+            if (url.isNotEmpty && validator.isURL(url)) {
+              // Encode the URL
+              final encodedUrl = Uri.encodeComponent(url);
               final endpoint =
-                  'https://process-url-2sel6rjo4q-uc.a.run.app/?url=$url';
-              final response = await http.get(Uri.parse(endpoint));
-              if (response.statusCode == 200) {
-                onSave(url);
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          'Processing $url. This may take a few minutes.')),
-                );
-              } else {
-                // Handle error
-                print(
-                    'Error triggering cloud function: ${response.statusCode}');
+                  'https://process-url-2sel6rjo4q-uc.a.run.app/?url=$encodedUrl';
+              print('Endpoint: $endpoint');
+
+              try {
+                final response = await http.get(Uri.parse(endpoint));
+                if (response.statusCode == 200) {
+                  print(
+                      'Submitted URL: $url'); // Debugging line to print the submitted URL
+                  onSave(url);
+                  Navigator.of(context).pop(); // Close the dialog
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            'Processing $url. This may take a few minutes.')),
+                  );
+                } else {
+                  throw Exception('Failed to process URL');
+                }
+              } catch (e) {
+                print('Error triggering cloud function: $e');
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text('Error processing URL. Please try again.')),
@@ -68,7 +69,6 @@ class AddUrlDialog extends StatelessWidget {
               }
             } else {
               // Handle invalid URL
-              print('Invalid URL');
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content: Text('Invalid URL. Please enter a valid URL.')),

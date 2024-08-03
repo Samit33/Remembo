@@ -17,6 +17,27 @@ class SavesScreen extends StatefulWidget {
 
 class _SavesScreenState extends State<SavesScreen> {
   String _searchQuery = '';
+  late Stream<QuerySnapshot> _userStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _userStream = widget.firestore.collection('user1').snapshots();
+    _userStream.listen((snapshot) {
+      for (var change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.modified) {
+          final data = change.doc.data() as Map<String, dynamic>?;
+          if (data != null && data['status'] == 'completed') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content:
+                      Text('New card ready: ${data['title'] ?? 'Untitled'}')),
+            );
+          }
+        }
+      }
+    });
+  }
 
   void _updateSearchQuery(String query) {
     setState(() {
@@ -29,8 +50,7 @@ class _SavesScreenState extends State<SavesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
-      body: 
-      Column(
+      body: Column(
         children: [
           SearchBarCustom(onSearch: _updateSearchQuery),
           Expanded(

@@ -64,32 +64,7 @@ class _SavedItemsListState extends State<SavedItemsList> {
           children: [
             if (processingDocs.isNotEmpty)
               _buildProcessingCards(processingDocs),
-            ...filteredDocs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>?;
-              if (data == null || doc.id == 'collections') {
-                return Container();
-              }
-
-              final allTags =
-                  (data['overallTags'] as List<dynamic>? ?? []).cast<String>();
-              final displayTags = _getShortestTags(allTags, 3);
-
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/resource_screen',
-                      arguments: doc.id);
-                },
-                child: SavedItem(
-                  itemId: doc.id,
-                  title: data['title'] as String? ?? 'No Title',
-                  tags: displayTags,
-                  initialActiveState: data['isActive'] as bool? ?? true,
-                  onToggle: (bool newState) {
-                    doc.reference.update({'isActive': newState});
-                  },
-                ),
-              );
-            }),
+            ...filteredDocs.map((doc) => _buildCompletedCard(doc)),
           ],
         );
       },
@@ -140,6 +115,32 @@ class _SavedItemsListState extends State<SavedItemsList> {
     );
   }
 
+  Widget _buildCompletedCard(QueryDocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>?;
+    if (data == null || doc.id == 'collections') {
+      return Container();
+    }
+
+    final allTags =
+        (data['overallTags'] as List<dynamic>? ?? []).cast<String>();
+    final displayTags = _getShortestTags(allTags, 3);
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/resource_screen', arguments: doc.id);
+      },
+      child: SavedItem(
+        itemId: doc.id,
+        title: data['title'] as String? ?? 'No Title',
+        tags: displayTags,
+        initialActiveState: data['isActive'] as bool? ?? true,
+        onToggle: (bool newState) {
+          doc.reference.update({'isActive': newState});
+        },
+      ),
+    );
+  }
+
   List<String> _getShortestTags(List<String> tags, int count) {
     if (tags.length <= count) return tags;
 
@@ -147,6 +148,8 @@ class _SavedItemsListState extends State<SavedItemsList> {
     return tags.take(count).toList();
   }
 }
+
+// ... Rest of the code (SavedItem class) remains the same
 
 class SavedItem extends StatefulWidget {
   final String title;
