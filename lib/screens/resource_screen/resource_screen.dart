@@ -34,10 +34,13 @@ class _ResourceScreenState extends State<ResourceScreen> {
     if (snapshot.exists) {
       var data = snapshot.data() as Map<String, dynamic>?;
       if (data != null) {
-        setState(() {
-          currentSectionIdentifier = data['currentSectionIdentifier'] ?? 1;
-          quizScore = data['quizScore'];
-        });
+        if (mounted) {
+          // Check if the widget is still mounted
+          setState(() {
+            currentSectionIdentifier = data['currentSectionIdentifier'] ?? 1;
+            quizScore = data['quizScore'];
+          });
+        }
       } else {
         await FirebaseFirestore.instance
             .collection('user1')
@@ -46,10 +49,13 @@ class _ResourceScreenState extends State<ResourceScreen> {
           'currentSectionIdentifier': 1,
           'quizScore': null // Explicitly set quizScore to null
         }, SetOptions(merge: true));
-        setState(() {
-          currentSectionIdentifier = 1;
-          quizScore = null;
-        });
+        if (mounted) {
+          // Check if the widget is still mounted
+          setState(() {
+            currentSectionIdentifier = 1;
+            quizScore = null;
+          });
+        }
       }
     }
   }
