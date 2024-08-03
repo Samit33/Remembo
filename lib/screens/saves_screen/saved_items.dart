@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/design/animated_button';
+import 'package:myapp/design/gradient_switch.dart';
 import 'package:myapp/design/ui_colors.dart';
 import 'package:myapp/design/ui_icons.dart';
 import 'package:myapp/design/ui_values.dart';
@@ -202,11 +203,11 @@ class _SavedItemState extends State<SavedItem> {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F1F1F),
+                    color: UIColors.headerColor,
                   ),
                 ),
               ),
-              CupertinoSwitch(
+              GradientSwitch(
                 value: isActive,
                 onChanged: (value) {
                   setState(() {
@@ -214,7 +215,14 @@ class _SavedItemState extends State<SavedItem> {
                   });
                   widget.onToggle(value);
                 },
-                activeColor: UIColors.primaryColor,
+                gradient: const LinearGradient(
+                  colors: [
+                    UIColors.primaryGradientColor1,
+                    UIColors.primaryGradientColor2
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               ),
             ],
           ),

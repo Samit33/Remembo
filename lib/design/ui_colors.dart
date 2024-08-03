@@ -14,6 +14,9 @@ class UIColors {
   static const Color warningColor = Color(0xFFFFC107);
   static const Color infoColor = Color(0xFF2196F3);
   static const Color dropShadowColor = Color.fromARGB(141, 201, 201, 201);
+  static const Color headerColor = Color(0xFF333333);
+  static const Color subHeaderColor = Color(0xFF666666);
+  static const Color bodyColor = Color(0xFF999999);
 
   // Make a gradient color
   static const Color primaryGradientColor1 = Color(0xFF7472F5);
