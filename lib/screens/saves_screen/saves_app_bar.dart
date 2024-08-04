@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/design/ui_colors.dart';
 import 'package:myapp/design/ui_icons.dart';
 import 'package:myapp/screens/saves_screen/category_tabs.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+class SavesAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const SavesAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

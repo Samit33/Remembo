@@ -44,6 +44,7 @@ dependencies:
   validators: ^3.0.0
   receive_sharing_intent: ^1.8.0
   flutter_local_notifications: ^17.2.1+2
+  cached_network_image: ^3.4.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,7 @@ flutter:
     - assets/images/profile_pic.jpg
     - assets/images/Icons/
     - assets/images/bg/
+    - assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

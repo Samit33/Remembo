@@ -8,16 +8,20 @@ class UIColors {
   static const Color secondaryBGColor = Color(0xFFEEFFF2);
   static const Color iconColor = Color.fromARGB(255, 253, 245, 245);
   static const Color disabledColor = Color.fromARGB(255, 214, 214, 214);
-  static const Color accentColor = Color(0xFF00BCD4);
+  static const Color accentColor = Color.fromARGB(255, 255, 188, 112);
   static const Color errorColor = Color(0xFFF44336);
-  static const Color successColor = Color(0xFF4CAF50);
+  static const Color successColor = Color.fromARGB(255, 157, 248, 160);
   static const Color warningColor = Color(0xFFFFC107);
   static const Color infoColor = Color(0xFF2196F3);
   static const Color dropShadowColor = Color.fromARGB(141, 201, 201, 201);
   static const Color headerColor = Color(0xFF333333);
   static const Color subHeaderColor = Color(0xFF666666);
   static const Color bodyColor = Color(0xFF999999);
-
+  static const TextStyle headerTextStyle = TextStyle(
+    color: headerColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
   // Make a gradient color
   static const Color primaryGradientColor1 = Color(0xFF7472F5);
   static const Color primaryGradientColor2 = Color(0xFF3F68FA);
@@ -29,6 +33,13 @@ class UIColors {
     color: dropShadowColor,
     spreadRadius: 2,
     blurRadius: 5,
+    offset: Offset(0, 3),
+  );
+
+  static const BoxShadow lighterDropShadow = BoxShadow(
+    color: dropShadowColor,
+    blurRadius: 3,
+    spreadRadius: 1,
     offset: Offset(0, 3),
   );
 }

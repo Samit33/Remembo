@@ -1,95 +1,167 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/design/animated_button';
+import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_fonts.dart';
+import 'package:myapp/design/ui_values.dart';
 import '../learning_screen/learning_card.dart';
 
 class ProgressTimeline extends StatelessWidget {
   final List<String> sectionTitles;
   final String docId;
   final int currentSectionIdentifier;
+  static const double sectionHeightDefault = 16;
+  static const double sectionHeightSelected = 24;
 
   const ProgressTimeline({
-    Key? key,
+    super.key,
     required this.sectionTitles,
     required this.docId,
     required this.currentSectionIdentifier,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: sectionTitles.length,
-      itemBuilder: (context, index) {
-        bool isCurrent =
-            index == (currentSectionIdentifier - 1); // Updated condition
-        bool isCompleted = index <
-            (currentSectionIdentifier - 1); // New condition for completed cards
-
-        return GestureDetector(
-          onTap: isCompleted |
-                  isCurrent // Updated to allow tap only on completed cards
-              ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LearningCard(
-                        docId: docId,
-                        sectionTitle: sectionTitles[index],
-                      ),
-                    ),
-                  );
-                }
-              : null,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Row(
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isCompleted
-                        ? Colors.green[800]
-                        : Colors.grey[300], // Updated color condition
-                  ),
-                  child:
-                      isCompleted // Updated to show tick only for completed cards
-                          ? Icon(Icons.check, color: Colors.white, size: 14)
-                          : null,
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: isCurrent ? Colors.green[100] : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            sectionTitles[index],
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                              fontWeight: isCurrent
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return Stack(
+      children: [
+        Positioned(
+          left: 32,
+          top: sectionHeightDefault * 3,
+          bottom: 0,
+          child: CustomPaint(
+            painter: _VerticalFillMeterPainter(
+              sectionCount: sectionTitles.length,
+              completedSections: currentSectionIdentifier - 1,
+            ),
+            child: SizedBox(
+              width: 20,
+              height: (sectionTitles.length - 1) * sectionHeightDefault +
+                  sectionHeightSelected, // Adjust based on your item height
             ),
           ),
-        );
-      },
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          padding:
+              const EdgeInsets.only(left: 64, right: 16, top: 8, bottom: 16),
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: sectionTitles.length,
+          itemBuilder: (context, index) {
+            bool isCurrent = index == (currentSectionIdentifier - 1);
+            bool isCompleted = index < (currentSectionIdentifier - 1);
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical:
+                      isCurrent ? sectionHeightSelected : sectionHeightDefault),
+              child: AnimatedButton(
+                onTap: () {
+                  if (isCompleted || isCurrent) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LearningCard(
+                          docId: docId,
+                          sectionTitle: sectionTitles[index],
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(
+                      isCurrent ? sectionHeightSelected : sectionHeightDefault),
+                  decoration: BoxDecoration(
+                    boxShadow: [UIColors.lighterDropShadow],
+                    color: isCurrent
+                        ? UIColors.accentColor
+                        : isCompleted
+                            ? UIColors.secondaryColor
+                            : Colors.grey[300],
+                    borderRadius:
+                        BorderRadius.circular(UiValues.defaultBorderRadius),
+                  ),
+                  child: Text(
+                    sectionTitles[index],
+                    style: TextStyle(
+                      fontFamily: UIFonts.fontBold,
+                      fontWeight:
+                          isCurrent ? FontWeight.bold : FontWeight.normal,
+                      color: isCurrent || isCompleted
+                          ? Colors.white
+                          : UIColors.headerColor.withOpacity(0.5),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
+}
+
+class _VerticalFillMeterPainter extends CustomPainter {
+  final int sectionCount;
+  final int completedSections;
+
+  _VerticalFillMeterPainter({
+    required this.sectionCount,
+    required this.completedSections,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = UIColors.primaryColor.withOpacity(0.5)
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    final fillPaint = Paint()
+      ..color = UIColors.primaryColor
+      ..style = PaintingStyle.fill;
+
+    final double sectionHeight = size.height / sectionCount;
+    final double fillHeight = sectionHeight * completedSections;
+
+    // Draw the vertical line
+    canvas.drawLine(
+      const Offset(0, 0),
+      Offset(0, size.height),
+      paint,
+    );
+
+    // Draw the fill
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, 2, fillHeight),
+      fillPaint,
+    );
+
+    // Draw circles for each section
+    for (int i = 0; i < sectionCount; i++) {
+      final yPosition = i * sectionHeight;
+      final isCompleted = i < completedSections;
+
+      canvas.drawCircle(
+        Offset(0, yPosition),
+        10,
+        Paint()..color = UIColors.primaryColor,
+      );
+
+      canvas.drawCircle(
+        Offset(0, yPosition),
+        8,
+        Paint()..color = Colors.white,
+      );
+
+      canvas.drawCircle(
+        Offset(0, yPosition),
+        7,
+        Paint()..color = isCompleted ? UIColors.primaryColor : Colors.white,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

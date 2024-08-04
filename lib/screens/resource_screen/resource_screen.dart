@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'resource_card.dart';
+import 'package:myapp/screens/resource_screen/resource_app_bar.dart';
 import 'progress_timeline.dart';
 import 'package:myapp/screens/saves_screen/bottom_navbar.dart';
 import 'comprehensive_quiz_screen.dart'; // Add this import
@@ -15,30 +15,36 @@ class ResourceScreen extends StatefulWidget {
 }
 
 class _ResourceScreenState extends State<ResourceScreen> {
+  Map<String, dynamic>? data = {};
   int currentSectionIdentifier = 1;
   int totalSections = 0;
   int? quizScore;
   int totalQuestions = 0;
+  String title = "";
+  String resourceURL = "";
 
   @override
   void initState() {
     super.initState();
-    fetchCurrentSectionIdentifier();
+    fetchResourceData();
   }
 
-  void fetchCurrentSectionIdentifier() async {
+  void fetchResourceData() async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('user1')
         .doc(widget.docId)
         .get();
     if (snapshot.exists) {
-      var data = snapshot.data() as Map<String, dynamic>?;
+      data = snapshot.data() as Map<String, dynamic>?;
+
       if (data != null) {
         if (mounted) {
           // Check if the widget is still mounted
           setState(() {
-            currentSectionIdentifier = data['currentSectionIdentifier'] ?? 1;
-            quizScore = data['quizScore'];
+            title = data?['title'] ?? 'No Title';
+            resourceURL = data?['url'] ?? '';
+            currentSectionIdentifier = data?['currentSectionIdentifier'] ?? 1;
+            quizScore = data?['quizScore'];
           });
         }
       } else {
@@ -46,6 +52,8 @@ class _ResourceScreenState extends State<ResourceScreen> {
             .collection('user1')
             .doc(widget.docId)
             .set({
+          'title': 'No Title',
+          'url': '',
           'currentSectionIdentifier': 1,
           'quizScore': null // Explicitly set quizScore to null
         }, SetOptions(merge: true));
@@ -54,6 +62,8 @@ class _ResourceScreenState extends State<ResourceScreen> {
           setState(() {
             currentSectionIdentifier = 1;
             quizScore = null;
+            title = 'No Title';
+            resourceURL = '';
           });
         }
       }
@@ -63,7 +73,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Resource Screen')),
+      appBar: ResourceAppBar(data: data),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user1')
@@ -117,11 +127,6 @@ class _ResourceScreenState extends State<ResourceScreen> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                ResourceCard(
-                  title: title,
-                  imageUrl: imageUrl,
-                  tags: tags,
-                ),
                 ProgressTimeline(
                   sectionTitles: uniqueSectionTitles,
                   currentSectionIdentifier: currentSectionIdentifier,

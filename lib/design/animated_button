@@ -22,7 +22,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
       onTap: widget.onTap,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 150),
-        transform: Matrix4.identity()..scale(_isPressed ? 0.95 : 1.0),
+        transform: Matrix4.identity()..scale(_isPressed ? 0.9 : 1.0),
         child: widget.child,
       ),
     );

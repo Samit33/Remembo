@@ -19,4 +19,6 @@ class UiAssets {
 
   static const String savesScreenHeaderBG =
       'assets/images/bg/SaveScreenHeader.png';
+  static const String resourceScreenHeaderBGDefault =
+      'assets/images/bg/ResourceScreenHeaderDefault.jpeg';
 }

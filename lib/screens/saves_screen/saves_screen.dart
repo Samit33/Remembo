@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'custom_app_bar.dart';
+import 'saves_app_bar.dart';
 import 'saved_items.dart';
 import 'search_bar.dart';
 import 'bottom_navbar.dart';
@@ -85,7 +85,7 @@ class _SavesScreenState extends State<SavesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(),
+      appBar: const SavesAppBar(),
       body: Column(
         children: [
           SearchBarCustom(onSearch: _updateSearchQuery),
