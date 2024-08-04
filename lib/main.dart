@@ -5,7 +5,7 @@ import 'firebase_options.dart';
 import 'screens/saves_screen/saves_screen.dart';
 import 'screens/resource_screen/resource_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'screens/saves_screen/shared_url_handler.dart';
+import 'screens/saves_screen/shared_url_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -38,20 +38,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Initialize SharedUrlHandler only once
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     SharedUrlHandler.listenForSharedUrls(context);
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // Initialize SharedUrlHandler only once
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SharedUrlHandler.listenForSharedUrls(context);
+    });
+  }
 
-  // @override
-  // void dispose() {
-  //   SharedUrlHandler.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    SharedUrlHandler.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
