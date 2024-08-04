@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 //Make a static class to keep this colors in
 class UIColors {
   static const Color primaryColor = Color(0xFF007BFF);
+  static const Color primaryColorLight = Color.fromARGB(255, 157, 205, 255);
   static const Color secondaryColor = Color(0xFF35B651);
-  static const Color secondaryBGColor = Color(0xFFEEFFF2);
+  static const Color secondaryColorLight = Color.fromARGB(255, 194, 250, 189);
+  static const Color secondaryBGColor = Color(0xFFD6FFDF);
   static const Color iconColor = Color.fromARGB(255, 253, 245, 245);
   static const Color disabledColor = Color.fromARGB(255, 214, 214, 214);
   static const Color accentColor = Color.fromARGB(255, 255, 188, 112);

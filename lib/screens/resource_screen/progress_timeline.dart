@@ -75,7 +75,7 @@ class ProgressTimeline extends StatelessWidget {
                     color: isCurrent
                         ? UIColors.accentColor
                         : isCompleted
-                            ? UIColors.secondaryColor
+                            ? UIColors.secondaryColorLight
                             : Colors.grey[300],
                     borderRadius:
                         BorderRadius.circular(UiValues.defaultBorderRadius),
@@ -86,9 +86,11 @@ class ProgressTimeline extends StatelessWidget {
                       fontFamily: UIFonts.fontBold,
                       fontWeight:
                           isCurrent ? FontWeight.bold : FontWeight.normal,
-                      color: isCurrent || isCompleted
+                      color: isCurrent
                           ? Colors.white
-                          : UIColors.headerColor.withOpacity(0.5),
+                          : isCompleted
+                              ? UIColors.secondaryColor
+                              : UIColors.headerColor.withOpacity(0.5),
                     ),
                   ),
                 ),
@@ -121,7 +123,8 @@ class _VerticalFillMeterPainter extends CustomPainter {
       ..color = UIColors.primaryColor
       ..style = PaintingStyle.fill;
 
-    final double sectionHeight = size.height / sectionCount;
+    final double sectionHeight =
+        (size.height + ProgressTimeline.sectionHeightDefault) / sectionCount;
     final double fillHeight = sectionHeight * completedSections;
 
     // Draw the vertical line
