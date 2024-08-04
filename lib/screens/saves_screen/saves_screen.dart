@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'custom_app_bar.dart';
 import 'saved_items.dart';
 import 'search_bar.dart';
 import 'bottom_navbar.dart';
-import 'shared_url_handler.dart';
 
 class SavesScreen extends StatefulWidget {
   final FirebaseFirestore firestore;
+  final FlutterLocalNotificationsPlugin notificationsPlugin;
 
-  const SavesScreen({Key? key, required this.firestore}) : super(key: key);
+  const SavesScreen(
+      {Key? key, required this.firestore, required this.notificationsPlugin})
+      : super(key: key);
 
   @override
   _SavesScreenState createState() => _SavesScreenState();
@@ -18,6 +21,7 @@ class SavesScreen extends StatefulWidget {
 class _SavesScreenState extends State<SavesScreen> {
   String _searchQuery = '';
   late Stream<QuerySnapshot> _userStream;
+  String? _previousStatus;
 
   @override
   void initState() {
@@ -27,19 +31,42 @@ class _SavesScreenState extends State<SavesScreen> {
       for (var change in snapshot.docChanges) {
         if (change.type == DocumentChangeType.modified) {
           final data = change.doc.data() as Map<String, dynamic>?;
-          if (data != null && data['status'] == 'completed') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+          if (data != null) {
+            final status = data['status'] as String?;
+            if (status == 'completed' && _previousStatus == 'processing') {
+              _showNotification(data['title'] ?? 'Untitled');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
                   content:
-                      Text('New card ready: ${data['title'] ?? 'Untitled'}')),
-            );
+                      Text('New card ready: ${data['title'] ?? 'Untitled'}'),
+                ),
+              );
+            }
+            _previousStatus = status;
           }
         }
       }
     });
+  }
 
-    // Set up shared URL handling
-    // SharedUrlHandler.listenForSharedUrls(context);
+  Future<void> _showNotification(String title) async {
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    // const iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    const platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      // iOS: iOSPlatformChannelSpecifics,
+    );
+    await widget.notificationsPlugin.show(
+      0,
+      'New Card Ready',
+      'Your new card "$title" is ready to view.',
+      platformChannelSpecifics,
+    );
   }
 
   // @override

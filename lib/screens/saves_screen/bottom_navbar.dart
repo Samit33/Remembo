@@ -37,13 +37,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AddUrlDialog(
-                onSave: (url) {
-                  // TODO: Implement save functionality
-                  print('URL to save: $url');
-                },
-                firestore: widget.firestore,
-              );
+              return AddUrlDialog();
             },
           );
           break;

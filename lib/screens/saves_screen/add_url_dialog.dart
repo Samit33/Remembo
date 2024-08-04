@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:validators/validators.dart' as validator;
 
 class AddUrlDialog extends StatelessWidget {
-  final Function(String) onSave;
-  final FirebaseFirestore firestore;
-
-  const AddUrlDialog(
-      {super.key, required this.onSave, required this.firestore});
-
   @override
   Widget build(BuildContext context) {
     String url = '';
@@ -50,13 +43,12 @@ class AddUrlDialog extends StatelessWidget {
                 if (response.statusCode == 200) {
                   print(
                       'Submitted URL: $url'); // Debugging line to print the submitted URL
-                  onSave(url);
-                  Navigator.of(context).pop(); // Close the dialog
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text(
                             'Processing $url. This may take a few minutes.')),
                   );
+                  Navigator.of(context).pop(); // Close the dialog
                 } else {
                   throw Exception('Failed to process URL');
                 }
