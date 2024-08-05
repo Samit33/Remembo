@@ -23,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       // Add your navigation logic here
       switch (index) {
         case 0:
-          // Navigate to Home screen
+          Navigator.pushNamed(context, '/'); // Navigate to Home screen
           break;
         case 1:
           // Navigate to List screen
