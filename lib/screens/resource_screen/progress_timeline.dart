@@ -9,8 +9,8 @@ class ProgressTimeline extends StatelessWidget {
   final List<String> sectionTitles;
   final String docId;
   final int currentSectionIdentifier;
-  static const double sectionHeightDefault = 16;
-  static const double sectionHeightSelected = 24;
+  static const double sectionHeightDefault = 16.0;
+  static const double sectionHeightSelected = 24.0;
 
   const ProgressTimeline({
     super.key,
@@ -21,84 +21,95 @@ class ProgressTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          left: 32,
-          top: sectionHeightDefault * 3,
-          bottom: 0,
-          child: CustomPaint(
-            painter: _VerticalFillMeterPainter(
-              sectionCount: sectionTitles.length,
-              completedSections: currentSectionIdentifier - 1,
-            ),
-            child: SizedBox(
-              width: 20,
-              height: (sectionTitles.length - 1) * sectionHeightDefault +
-                  sectionHeightSelected, // Adjust based on your item height
-            ),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          padding:
-              const EdgeInsets.only(left: 64, right: 16, top: 8, bottom: 16),
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: sectionTitles.length,
-          itemBuilder: (context, index) {
-            bool isCurrent = index == (currentSectionIdentifier - 1);
-            bool isCompleted = index < (currentSectionIdentifier - 1);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Stack(
+          children: [
+            _buildVerticalFillMeter(constraints),
+            _buildSectionList(constraints),
+          ],
+        );
+      },
+    );
+  }
 
-            return Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical:
-                      isCurrent ? sectionHeightSelected : sectionHeightDefault),
-              child: AnimatedButton(
-                onTap: () {
-                  if (isCompleted || isCurrent) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LearningCard(
-                          docId: docId,
-                          sectionTitle: sectionTitles[index],
-                        ),
-                      ),
-                    );
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.all(
-                      isCurrent ? sectionHeightSelected : sectionHeightDefault),
-                  decoration: BoxDecoration(
-                    boxShadow: [UIColors.lighterDropShadow],
-                    color: isCurrent
-                        ? UIColors.accentColor
-                        : isCompleted
-                            ? UIColors.secondaryColorLight
-                            : Colors.grey[300],
-                    borderRadius:
-                        BorderRadius.circular(UiValues.defaultBorderRadius),
-                  ),
-                  child: Text(
-                    sectionTitles[index],
-                    style: TextStyle(
-                      fontFamily: UIFonts.fontBold,
-                      fontWeight:
-                          isCurrent ? FontWeight.bold : FontWeight.normal,
-                      color: isCurrent
-                          ? Colors.white
-                          : isCompleted
-                              ? UIColors.secondaryColor
-                              : UIColors.headerColor.withOpacity(0.5),
+  Widget _buildVerticalFillMeter(BoxConstraints constraints) {
+    return Positioned(
+      left: 32,
+      top: 0,
+      bottom: 0,
+      child: CustomPaint(
+        painter: _VerticalFillMeterPainter(
+          sectionCount: sectionTitles.length,
+          completedSections: currentSectionIdentifier - 1,
+          sectionPositions: List.generate(sectionTitles.length, (index) {
+            return (index * (sectionHeightDefault * 3 + 16)) +
+                sectionHeightDefault * 1.5;
+          }),
+        ),
+        child: SizedBox(
+          width: 20,
+          height: constraints.maxHeight,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionList(BoxConstraints constraints) {
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.only(left: 64, right: 16, top: 0, bottom: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: sectionTitles.length,
+      itemBuilder: (context, index) {
+        bool isCurrent = index == (currentSectionIdentifier - 1);
+        bool isCompleted = index < (currentSectionIdentifier - 1);
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: sectionHeightDefault),
+          child: AnimatedButton(
+            onTap: () {
+              if (isCompleted || isCurrent) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LearningCard(
+                      docId: docId,
+                      sectionTitle: sectionTitles[index],
                     ),
                   ),
+                );
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(
+                  isCurrent ? sectionHeightSelected : sectionHeightDefault),
+              decoration: BoxDecoration(
+                boxShadow: [UIColors.lighterDropShadow],
+                color: isCurrent
+                    ? UIColors.accentColor
+                    : isCompleted
+                        ? UIColors.secondaryColorLight
+                        : Colors.grey[300],
+                borderRadius:
+                    BorderRadius.circular(UiValues.defaultBorderRadius),
+              ),
+              child: Text(
+                sectionTitles[index],
+                style: TextStyle(
+                  fontFamily: UIFonts.fontBold,
+                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                  color: isCurrent
+                      ? Colors.white
+                      : isCompleted
+                          ? UIColors.secondaryColor
+                          : UIColors.headerColor.withOpacity(0.5),
                 ),
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -106,10 +117,12 @@ class ProgressTimeline extends StatelessWidget {
 class _VerticalFillMeterPainter extends CustomPainter {
   final int sectionCount;
   final int completedSections;
+  final List<double> sectionPositions;
 
   _VerticalFillMeterPainter({
     required this.sectionCount,
     required this.completedSections,
+    required this.sectionPositions,
   });
 
   @override
@@ -123,42 +136,42 @@ class _VerticalFillMeterPainter extends CustomPainter {
       ..color = UIColors.primaryColor
       ..style = PaintingStyle.fill;
 
-    final double sectionHeight =
-        (size.height + ProgressTimeline.sectionHeightDefault) / sectionCount;
-    final double fillHeight = sectionHeight * completedSections;
-
     // Draw the vertical line
     canvas.drawLine(
-      const Offset(0, 0),
-      Offset(0, size.height),
+      Offset(0, sectionPositions.first),
+      Offset(0, sectionPositions.last),
       paint,
     );
 
     // Draw the fill
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, 2, fillHeight),
-      fillPaint,
-    );
+    if (completedSections > 0) {
+      double fillEnd = completedSections < sectionCount
+          ? sectionPositions[completedSections]
+          : sectionPositions.last;
+      canvas.drawRect(
+        Rect.fromLTRB(0, sectionPositions.first, 2, fillEnd),
+        fillPaint,
+      );
+    }
 
     // Draw circles for each section
     for (int i = 0; i < sectionCount; i++) {
-      final yPosition = i * sectionHeight;
       final isCompleted = i < completedSections;
 
       canvas.drawCircle(
-        Offset(0, yPosition),
+        Offset(0, sectionPositions[i]),
         10,
         Paint()..color = UIColors.primaryColor,
       );
 
       canvas.drawCircle(
-        Offset(0, yPosition),
+        Offset(0, sectionPositions[i]),
         8,
         Paint()..color = Colors.white,
       );
 
       canvas.drawCircle(
-        Offset(0, yPosition),
+        Offset(0, sectionPositions[i]),
         7,
         Paint()..color = isCompleted ? UIColors.primaryColor : Colors.white,
       );
@@ -166,5 +179,7 @@ class _VerticalFillMeterPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _VerticalFillMeterPainter oldDelegate) =>
+      oldDelegate.completedSections != completedSections ||
+      oldDelegate.sectionPositions != sectionPositions;
 }
