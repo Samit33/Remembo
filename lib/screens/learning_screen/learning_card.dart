@@ -86,9 +86,14 @@ class _LearningCardState extends State<LearningCard> {
                           icon: Icon(Icons.close),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
-                        Text(
-                          widget.sectionTitle,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        Flexible(
+                          // Added Flexible to prevent overflow
+                          child: Text(
+                            widget.sectionTitle,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ),
                         SizedBox(width: 48), // To balance the close button
                       ],

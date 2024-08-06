@@ -146,6 +146,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
                               setState(() {
                                 quizScore = score;
                               });
+                              Navigator.pop(context);
                             },
                           ),
                         ),

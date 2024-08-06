@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/design/animated_button';
-import 'package:myapp/design/gradient_switch.dart';
 import 'package:myapp/design/ui_colors.dart';
 import 'package:myapp/design/ui_icons.dart';
 import 'package:myapp/design/ui_values.dart';
@@ -125,6 +124,9 @@ class _SavedItemsListState extends State<SavedItemsList> {
         (data['overallTags'] as List<dynamic>? ?? []).cast<String>();
     final displayTags = _getShortestTags(allTags, 3);
 
+    final totalSections =
+        (data['learning_cards']?['args']?['cards'] as List?)?.length ?? 1;
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/resource_screen', arguments: doc.id);
@@ -133,10 +135,8 @@ class _SavedItemsListState extends State<SavedItemsList> {
         itemId: doc.id,
         title: data['title'] as String? ?? 'No Title',
         tags: displayTags,
-        initialActiveState: data['isActive'] as bool? ?? true,
-        onToggle: (bool newState) {
-          doc.reference.update({'isActive': newState});
-        },
+        currentSectionIdentifier: data['currentSectionIdentifier'] as int? ?? 1,
+        totalSections: totalSections,
       ),
     );
   }
@@ -149,36 +149,21 @@ class _SavedItemsListState extends State<SavedItemsList> {
   }
 }
 
-// ... Rest of the code (SavedItem class) remains the same
-
-class SavedItem extends StatefulWidget {
+class SavedItem extends StatelessWidget {
   final String title;
   final List tags;
-  final bool initialActiveState;
-  final Function(bool) onToggle;
+  final int currentSectionIdentifier;
+  final int totalSections;
   final String itemId;
 
   const SavedItem({
     super.key,
     required this.title,
     required this.tags,
-    required this.initialActiveState,
-    required this.onToggle,
+    required this.currentSectionIdentifier,
+    required this.totalSections,
     required this.itemId,
   });
-
-  @override
-  _SavedItemState createState() => _SavedItemState();
-}
-
-class _SavedItemState extends State<SavedItem> {
-  late bool isActive;
-
-  @override
-  void initState() {
-    super.initState();
-    isActive = widget.initialActiveState;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +183,7 @@ class _SavedItemState extends State<SavedItem> {
             children: [
               Expanded(
                 child: Text(
-                  widget.title,
+                  title,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -206,22 +191,8 @@ class _SavedItemState extends State<SavedItem> {
                   ),
                 ),
               ),
-              GradientSwitch(
-                value: isActive,
-                onChanged: (value) {
-                  setState(() {
-                    isActive = value;
-                  });
-                  widget.onToggle(value);
-                },
-                gradient: const LinearGradient(
-                  colors: [
-                    UIColors.primaryGradientColor1,
-                    UIColors.primaryGradientColor2
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
+              RadialProgressWidget(
+                progress: currentSectionIdentifier / totalSections,
               ),
             ],
           ),
@@ -230,32 +201,31 @@ class _SavedItemState extends State<SavedItem> {
             children: [
               Expanded(
                 child: Wrap(
-                  children:
-                      widget.tags.take(3).map((tag) => _buildTag(tag)).toList(),
+                  children: tags.take(3).map((tag) => _buildTag(tag)).toList(),
                 ),
               ),
               AnimatedButton(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(UiValues.defaultBorderRadius),
-                      boxShadow: const [UIColors.dropShadow],
-                    ),
-                    child: Image.asset(UiAssets.addToCollectionIcon,
-                        width: 24, height: 24),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.circular(UiValues.defaultBorderRadius),
+                    boxShadow: const [UIColors.dropShadow],
                   ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AddToCollectionDialog(
-                        firestore: FirebaseFirestore.instance,
-                        userId: 'user1', // Replace with your actual user ID
-                        itemId:
-                            widget.itemId, // Replace with your actual item ID
-                      ),
-                    ); // TODO: Implement add to collections functionality
-                  })
+                  child: Image.asset(UiAssets.addToCollectionIcon,
+                      width: 24, height: 24),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AddToCollectionDialog(
+                      firestore: FirebaseFirestore.instance,
+                      userId: 'user1',
+                      itemId: itemId,
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ],
@@ -277,6 +247,42 @@ class _SavedItemState extends State<SavedItem> {
           color: UIColors.secondaryColor,
           fontSize: 12,
         ),
+      ),
+    );
+  }
+}
+
+class RadialProgressWidget extends StatelessWidget {
+  final double progress;
+
+  const RadialProgressWidget({Key? key, required this.progress})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: Stack(
+        children: [
+          CircularProgressIndicator(
+            value: progress,
+            backgroundColor: Colors.grey[300],
+            valueColor:
+                AlwaysStoppedAnimation<Color>(UIColors.primaryGradientColor1),
+            strokeWidth: 4,
+          ),
+          Center(
+            child: Text(
+              '${(progress * 100).toInt()}%',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: UIColors.primaryGradientColor1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
