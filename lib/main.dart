@@ -15,18 +15,32 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   // Initialize notifications
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
-  // final IOSInitializationSettings initializationSettingsIOS =
-  //     IOSInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
-    // iOS: initializationSettingsIOS,
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // Set up notification handling
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      final String? payload = response.payload;
+      if (payload != null) {
+        // Navigate to ResourceScreen with the docId
+        navigatorKey.currentState
+            ?.pushNamed('/resource_screen', arguments: payload);
+      }
+    },
+  );
+
   runApp(MyApp());
 }
+
+// Add a GlobalKey for navigation
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   MyApp({super.key});
@@ -41,7 +55,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Initialize SharedUrlHandler only once
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SharedUrlHandler.listenForSharedUrls(context);
     });
@@ -56,6 +69,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey, // Add this line
       title: 'Saves App',
       theme: ThemeData(
         primarySwatch: Colors.blue,

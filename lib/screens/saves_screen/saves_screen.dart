@@ -34,7 +34,7 @@ class _SavesScreenState extends State<SavesScreen> {
           if (data != null) {
             final status = data['status'] as String?;
             if (status == 'completed' && _previousStatus == 'processing') {
-              _showNotification(data['title'] ?? 'Untitled');
+              _showNotification(data['title'] ?? 'Untitled', change.doc.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:
@@ -49,31 +49,24 @@ class _SavesScreenState extends State<SavesScreen> {
     });
   }
 
-  Future<void> _showNotification(String title) async {
+  Future<void> _showNotification(String title, String docId) async {
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'your_channel_id',
       'your_channel_name',
       importance: Importance.max,
       priority: Priority.high,
     );
-    // const iOSPlatformChannelSpecifics = IOSNotificationDetails();
     const platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
-      // iOS: iOSPlatformChannelSpecifics,
     );
     await widget.notificationsPlugin.show(
       0,
       'New Card Ready',
-      'Your new card "$title" is ready to view.',
+      '"$title" is ready to view.',
       platformChannelSpecifics,
+      payload: docId, // Pass the document ID as the payload
     );
   }
-
-  // @override
-  // void dispose() {
-  //   SharedUrlHandler.dispose();
-  //   super.dispose();
-  // }
 
   void _updateSearchQuery(String query) {
     setState(() {
