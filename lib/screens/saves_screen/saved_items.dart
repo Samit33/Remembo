@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/design/GradientCircularProgressIndicator.dart';
 import 'package:myapp/design/animated_button';
 import 'package:myapp/design/ui_colors.dart';
 import 'package:myapp/design/ui_icons.dart';
@@ -97,32 +99,7 @@ class _SavedItemsListState extends State<SavedItemsList> {
   }
 
   Widget _buildProcessingCard(QueryDocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>?;
-    final url = data?['url'] as String? ?? 'Unknown URL';
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          const CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              'Processing $url',
-              style: const TextStyle(fontSize: 14),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
+    return ProcessingCard(doc: doc);
   }
 
   Widget _buildCompletedCard(QueryDocumentSnapshot doc) {
@@ -157,6 +134,79 @@ class _SavedItemsListState extends State<SavedItemsList> {
 
     tags.sort((a, b) => a.length.compareTo(b.length));
     return tags.take(count).toList();
+  }
+}
+
+class ProcessingCard extends StatefulWidget {
+  final QueryDocumentSnapshot doc;
+
+  const ProcessingCard({Key? key, required this.doc}) : super(key: key);
+
+  @override
+  _ProcessingCardState createState() => _ProcessingCardState();
+}
+
+class _ProcessingCardState extends State<ProcessingCard> {
+  late Timer _timer;
+  int _currentIndex = 0;
+  final List<String> _processingTexts = [
+    'Processing new save',
+    'Your learning journey is brewing...',
+    'Preparing your knowledge cards!',
+    'Breaking down your saved link into simple steps...',
+    'Turning your saved chaos into clear learning...',
+    'Almost there!'
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_currentIndex < _processingTexts.length - 1) {
+        setState(() {
+          _currentIndex++;
+        });
+      } else {
+        _timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final data = widget.doc.data() as Map<String, dynamic>?;
+    final url = data?['url'] as String? ?? 'Unknown URL';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(UIColors.primaryColor),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              '${_processingTexts[_currentIndex]}',
+              style: const TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
