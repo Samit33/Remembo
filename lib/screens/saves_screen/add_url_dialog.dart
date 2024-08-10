@@ -67,8 +67,7 @@ class AddUrlDialog extends StatelessWidget {
               );
             }
           },
-          child: const Text('Save to Rememdo',
-              style: TextStyle(color: Colors.white)),
+          child: const Text('Save', style: TextStyle(color: Colors.white)),
         ),
       ],
     );
