@@ -70,15 +70,24 @@ class ProgressTimeline extends StatelessWidget {
           child: AnimatedButton(
             onTap: () {
               if (isCompleted || isCurrent) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LearningCard(
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return LearningCard(
                       docId: docId,
                       sectionTitle: sectionTitles[index],
-                    ),
-                  ),
+                    );
+                  },
                 );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => LearningCard(
+                //       docId: docId,
+                //       sectionTitle: sectionTitles[index],
+                //     ),
+                //   ),
+                // );
               }
             },
             child: Container(

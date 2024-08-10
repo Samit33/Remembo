@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:myapp/design/animated_button';
+import 'package:myapp/design/ui_colors.dart';
+import 'package:myapp/design/ui_fonts.dart';
+import 'package:myapp/design/ui_icons.dart';
+import 'package:myapp/design/ui_values.dart';
 import 'quiz_card.dart';
 
 class ReviewCard extends StatefulWidget {
   final String docId;
   final String sectionTitle;
   final int sectionIdentifier;
-  // final Function() onReviewComplete;
 
-  const ReviewCard(
-      {Key? key,
-      required this.docId,
-      required this.sectionTitle,
-      required this.sectionIdentifier
-      // required this.onReviewComplete,
-      })
-      : super(key: key);
+  const ReviewCard({
+    Key? key,
+    required this.docId,
+    required this.sectionTitle,
+    required this.sectionIdentifier,
+  }) : super(key: key);
 
   @override
   _ReviewCardState createState() => _ReviewCardState();
@@ -27,17 +29,56 @@ class _ReviewCardState extends State<ReviewCard> {
   int currentCardIndex = 0;
   List<Map<String, dynamic>> reviewCards = [];
 
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: const BoxDecoration(
+        color: UIColors.accentColor,
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(UiValues.defaultBorderRadius * 2)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              widget.sectionTitle,
+              style: const TextStyle(
+                fontSize: 18,
+                fontFamily: UIFonts.fontBold,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
+                color: Colors.white,
+              ),
+              maxLines: 3,
+            ),
+          ),
+          SizedBox(width: 16),
+          AnimatedButton(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
+              child: Image.asset(
+                UiAssets.resourceScreenHeaderBGDefault,
+                height: 64,
+                width: 64,
+                fit: BoxFit.cover,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.sectionTitle),
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: StreamBuilder<DocumentSnapshot>(
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.all(16),
+      child: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user1')
             .doc(widget.docId)
@@ -76,76 +117,125 @@ class _ReviewCardState extends State<ReviewCard> {
           String question = currentCard['Q'] ?? 'No question available';
           String answer = currentCard['A'] ?? 'No answer available';
 
-          // // Convert section_identifier to int, handling potential double values
-          // int sectionIdentifier = (currentCard['section_identifier'] is int)
-          //     ? currentCard['section_identifier']
-          //     : (currentCard['section_identifier'] as double).toInt();
-
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Question:',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  SizedBox(height: 8),
-                  MarkdownBody(
-                    data: question,
-                    styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                        .copyWith(
-                      p: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  if (showAnswer) ...[
-                    Text(
-                      'Answer:',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    SizedBox(height: 8),
-                    MarkdownBody(
-                      data: answer,
-                      styleSheet:
-                          MarkdownStyleSheet.fromTheme(Theme.of(context))
-                              .copyWith(
-                        p: Theme.of(context).textTheme.bodyLarge,
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius:
+                  BorderRadius.circular(UiValues.defaultBorderRadius * 2),
+            ),
+            child: Column(
+              children: [
+                _buildHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Question:',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SizedBox(height: 8),
+                          MarkdownBody(
+                            data: question,
+                            styleSheet:
+                                MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                    .copyWith(
+                              p: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                          SizedBox(height: 24),
+                          if (showAnswer) ...[
+                            Text(
+                              'Answer:',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            SizedBox(height: 8),
+                            MarkdownBody(
+                              data: answer,
+                              styleSheet: MarkdownStyleSheet.fromTheme(
+                                      Theme.of(context))
+                                  .copyWith(
+                                p: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                  ],
-                  SizedBox(height: 24),
-                  Row(
+                  ),
+                ),
+                Text(
+                  '${currentCardIndex + 1} / ${reviewCards.length}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                        onPressed: currentCardIndex > 0
+                      AnimatedButton(
+                        onTap: currentCardIndex > 0
                             ? () {
                                 setState(() {
                                   currentCardIndex--;
                                   showAnswer = false;
                                 });
                               }
-                            : null,
-                        child: Text('Previous'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                            : () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          width: 112,
+                          height: 48,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: UIColors.secondaryBGColor,
+                            borderRadius: BorderRadius.circular(
+                                UiValues.defaultBorderRadius),
+                          ),
+                          child: const Text(
+                            "Previous",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: UIFonts.fontBold,
+                                fontWeight: FontWeight.bold,
+                                color: UIColors.subHeaderColor),
+                          ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
+                      AnimatedButton(
+                        onTap: () {
                           setState(() {
                             showAnswer = !showAnswer;
                           });
                         },
-                        child: Text(showAnswer ? 'Hide Answer' : 'Show Answer'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          width: 112,
+                          height: 48,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: UIColors.secondaryColor,
+                            borderRadius: BorderRadius.circular(
+                                UiValues.defaultBorderRadius),
+                          ),
+                          child: Text(
+                            showAnswer ? 'Hide Answer' : 'Show Answer',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontFamily: UIFonts.fontBold,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
+                      AnimatedButton(
+                        onTap: () {
                           if (currentCardIndex < reviewCards.length - 1) {
                             setState(() {
                               currentCardIndex++;
@@ -156,29 +246,59 @@ class _ReviewCardState extends State<ReviewCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => QuizCard(
-                                    docId: widget.docId,
-                                    sectionTitle: widget.sectionTitle,
-                                    sectionIdentifier: widget.sectionIdentifier
-                                    // onQuizComplete:
-                                    //     (score, quizSectionIdentifier) {
-                                    //   widget.onReviewComplete();
-                                    // },
-                                    ),
+                                  docId: widget.docId,
+                                  sectionTitle: widget.sectionTitle,
+                                  sectionIdentifier: widget.sectionIdentifier,
+                                ),
                               ),
                             );
                           }
                         },
-                        child: Text(currentCardIndex < reviewCards.length - 1
-                            ? 'Next'
-                            : 'Take Quiz'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          width: 112,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: UIColors.secondaryColor,
+                            borderRadius: BorderRadius.circular(
+                                UiValues.defaultBorderRadius),
+                          ),
+                          child: Text(
+                            currentCardIndex < reviewCards.length - 1
+                                ? 'Next'
+                                : 'Take Quiz',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontFamily: UIFonts.fontBold,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: UIColors.errorColor,
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(20)),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: AnimatedButton(
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 32),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
