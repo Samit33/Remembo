@@ -27,7 +27,6 @@ class SharedUrlHandler {
               content:
                   Text('Processing $sharedUrl. This may take a few minutes.')),
         );
-        Navigator.of(context).pop(); // Close the dialog
       } else {
         throw Exception('Failed to process URL');
       }
