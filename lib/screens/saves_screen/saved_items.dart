@@ -44,16 +44,6 @@ class _SavedItemsListState extends State<SavedItemsList> {
           return data?['status'] == 'completed' || data?['status'] == null;
         }).toList();
 
-        // Sort completed documents by timestamp in descending order
-        completedDocs.sort((a, b) {
-          final aData = a.data() as Map<String, dynamic>?;
-          final bData = b.data() as Map<String, dynamic>?;
-          final aTimestamp = aData?['timestamp'] as Timestamp?;
-          final bTimestamp = bData?['timestamp'] as Timestamp?;
-          if (aTimestamp == null || bTimestamp == null) return 0;
-          return bTimestamp.compareTo(aTimestamp);
-        });
-
         final filteredDocs = completedDocs.where((doc) {
           final data = doc.data() as Map<String, dynamic>?;
           if (data == null) return false;
@@ -68,11 +58,22 @@ class _SavedItemsListState extends State<SavedItemsList> {
               tags.any((tag) => tag.contains(query));
         }).toList();
 
+        // Sort filtered documents by timestamp in descending order
+        filteredDocs.sort((a, b) {
+          final aData = a.data() as Map<String, dynamic>?;
+          final bData = b.data() as Map<String, dynamic>?;
+          final aTimestamp = aData?['timestamp'] as Timestamp?;
+          final bTimestamp = bData?['timestamp'] as Timestamp?;
+          if (aTimestamp == null || bTimestamp == null) return 0;
+          return bTimestamp.compareTo(aTimestamp);
+        });
+
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
             if (processingDocs.isNotEmpty)
               _buildProcessingCards(processingDocs),
+            // Use the sorted filteredDocs to build completed cards
             ...filteredDocs.map((doc) => _buildCompletedCard(doc)),
           ],
         );
