@@ -30,12 +30,12 @@ class _QuizCardState extends State<QuizCard> {
   List<Map<String, dynamic>> quizCards = [];
   String? selectedAnswer;
   bool answerSubmitted = false;
-  Map<String, dynamic>? cachedData;
+  late Future<void> _quizDataFuture;
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    _quizDataFuture = _fetchData();
   }
 
   Future<void> _fetchData() async {
@@ -45,16 +45,19 @@ class _QuizCardState extends State<QuizCard> {
         .get();
 
     if (snapshot.exists) {
-      setState(() {
-        cachedData = snapshot.data() as Map<String, dynamic>?;
-        quizCards = (cachedData?['quiz_cards']?['args']?['quiz_cards'] as List?)
-                ?.map((card) => card as Map<String, dynamic>)
-                .toList() ??
-            [];
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      List<Map<String, dynamic>> fetchedQuizCards =
+          (data?['quiz_cards']?['args']?['quiz_cards'] as List?)
+                  ?.map((card) => card as Map<String, dynamic>)
+                  .toList() ??
+              [];
 
-        quizCards = quizCards
-            .where((card) => card['section_title'] == widget.sectionTitle)
-            .toList();
+      fetchedQuizCards = fetchedQuizCards
+          .where((card) => card['section_title'] == widget.sectionTitle)
+          .toList();
+
+      setState(() {
+        quizCards = fetchedQuizCards;
       });
     }
   }
@@ -78,7 +81,6 @@ class _QuizCardState extends State<QuizCard> {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: const BoxDecoration(
-        color: UIColors.primaryGradientColor2,
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(UiValues.defaultBorderRadius * 2)),
       ),
@@ -219,8 +221,8 @@ class _QuizCardState extends State<QuizCard> {
           Expanded(
             child: _buildNavigationButton(
               currentCardIndex < quizCards.length - 1 ? 'Next' : 'Finish',
-              UIColors.secondaryColorLight,
-              UIColors.headerColor,
+              UIColors.secondaryColor,
+              Colors.white,
               answerSubmitted
                   ? () {
                       if (currentCardIndex < quizCards.length - 1) {
@@ -293,72 +295,111 @@ class _QuizCardState extends State<QuizCard> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.all(16),
-      child: cachedData == null
-          ? Center(child: CircularProgressIndicator())
-          : quizCards.isEmpty
-              ? Center(
-                  child: Text(
-                      'No quiz cards available for this section. Returning to the previous screen...'),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.circular(UiValues.defaultBorderRadius * 2),
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.fromLTRB(
+          UiValues.defaultPadding,
+          UiValues.defaultPadding * 2,
+          UiValues.defaultPadding,
+          UiValues.defaultPadding * 2),
+      child: FutureBuilder<void>(
+        future: _quizDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (quizCards.isEmpty) {
+            return const Center(
+              child: Text(
+                  'No quiz cards available for this section. Returning to the previous screen...'),
+            );
+          }
+
+          return Container(
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      UIColors.primaryGradientColor1,
+                      UIColors.primaryGradientColor2
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  child: Column(
-                    children: [
-                      _buildHeader(),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Question ${currentCardIndex + 1} of ${quizCards.length}',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: UIFonts.fontBold,
-                                    color: UIColors.subHeaderColor,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                MarkdownBody(
-                                  data: quizCards[currentCardIndex]['Q'] ??
-                                      'No question available',
-                                  styleSheet: MarkdownStyleSheet.fromTheme(
-                                          Theme.of(context))
-                                      .copyWith(
-                                    p: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: UIFonts.fontRegular,
-                                      color: UIColors.headerColor,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                                ...quizCards[currentCardIndex]['choices']
-                                    .entries
-                                    .map((choice) => _buildQuizOption(
-                                          choice.key,
-                                          choice.value,
-                                          quizCards[currentCardIndex]
-                                              ['correct_answer'],
-                                        )),
-                              ],
-                            ),
-                          ),
+                  borderRadius:
+                      BorderRadius.circular(UiValues.defaultBorderRadius * 2)),
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          bottom:
+                              Radius.circular(UiValues.defaultBorderRadius * 2),
+                          top:
+                              Radius.circular(UiValues.defaultBorderRadius * 2),
                         ),
                       ),
-                      _buildBottomButtons(quizCards),
-                      _buildCloseButton(),
-                    ],
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Question ${currentCardIndex + 1} of ${quizCards.length}',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: UIFonts.fontBold,
+                                        color: UIColors.subHeaderColor,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    MarkdownBody(
+                                      data: quizCards[currentCardIndex]['Q'] ??
+                                          'No question available',
+                                      styleSheet: MarkdownStyleSheet.fromTheme(
+                                              Theme.of(context))
+                                          .copyWith(
+                                        p: const TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: UIFonts.fontRegular,
+                                          color: UIColors.headerColor,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    ...quizCards[currentCardIndex]['choices']
+                                        .entries
+                                        .map((choice) => _buildQuizOption(
+                                              choice.key,
+                                              choice.value,
+                                              quizCards[currentCardIndex]
+                                                  ['correct_answer'],
+                                            )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          _buildBottomButtons(quizCards),
+                          _buildCloseButton(),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
+              ));
+        },
+      ),
     );
   }
 }
