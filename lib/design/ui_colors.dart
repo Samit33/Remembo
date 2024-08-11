@@ -10,7 +10,7 @@ class UIColors {
   static const Color secondaryBGColor = Color(0xFFD6FFDF);
   static const Color iconColor = Color.fromARGB(255, 253, 245, 245);
   static const Color disabledColor = Color.fromARGB(255, 214, 214, 214);
-  static const Color accentColor = Color.fromARGB(255, 255, 188, 112);
+  static const Color accentColor = Color(0xffff8a67);
   static const Color errorColor = Color.fromARGB(255, 240, 86, 75);
   static const Color successColor = Color.fromARGB(255, 157, 248, 160);
   static const Color warningColor = Color(0xFFFFC107);
