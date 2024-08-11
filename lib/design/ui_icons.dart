@@ -1,4 +1,5 @@
 class UiAssets {
+  static const String appIcon = 'assets/images/Icons/appIcon.png';
   static const String addToCollectionIcon =
       'assets/images/Icons/AddToCollectionIcon.png';
   static const String filterIcon = 'assets/images/Icons/FilterIcon.png';

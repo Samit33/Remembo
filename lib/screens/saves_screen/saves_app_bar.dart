@@ -31,9 +31,7 @@ class SavesAppBar extends StatelessWidget implements PreferredSizeWidget {
             actions: [
               Container(
                 margin: const EdgeInsets.only(right: 16),
-                child: const CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/profile_pic.jpg'),
-                ),
+                child: Image.asset(UiAssets.appIcon),
               ),
             ],
           ),

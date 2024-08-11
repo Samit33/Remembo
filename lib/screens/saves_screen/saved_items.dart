@@ -256,10 +256,10 @@ class SavedItem extends StatelessWidget {
                   ),
                 ),
               ),
-              RadialProgressWidget(
-                progress: currentSectionIdentifier / totalSections,
-              ),
-              // AnimatedRadialProgressWidget()
+              // RadialProgressWidget(
+              //   progress: currentSectionIdentifier / totalSections,
+              // ),
+              AnimatedRadialProgressWidget()
             ],
           ),
           const SizedBox(height: 16),
