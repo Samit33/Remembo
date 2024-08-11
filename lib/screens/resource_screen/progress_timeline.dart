@@ -43,8 +43,8 @@ class ProgressTimeline extends StatelessWidget {
           sectionCount: sectionTitles.length,
           completedSections: currentSectionIdentifier - 1,
           sectionPositions: List.generate(sectionTitles.length, (index) {
-            return (index * (sectionHeightDefault * 3 + 16)) +
-                sectionHeightDefault * 1.5;
+            return (index * (sectionHeightDefault * 4 + 16)) +
+                sectionHeightDefault * 3;
           }),
         ),
         child: SizedBox(
@@ -94,14 +94,13 @@ class ProgressTimeline extends StatelessWidget {
               }
             },
             child: Container(
-              padding: EdgeInsets.all(
-                  isCurrent ? sectionHeightSelected : sectionHeightDefault),
+              padding: const EdgeInsets.all(sectionHeightDefault),
               decoration: BoxDecoration(
-                boxShadow: [UIColors.lighterDropShadow],
+                boxShadow: const [UIColors.lighterDropShadow],
                 color: isCurrent
                     ? UIColors.accentColor
                     : isCompleted
-                        ? UIColors.secondaryColorLight
+                        ? UIColors.secondaryColor
                         : Colors.grey[300],
                 borderRadius:
                     BorderRadius.circular(UiValues.defaultBorderRadius),
@@ -114,7 +113,7 @@ class ProgressTimeline extends StatelessWidget {
                   color: isCurrent
                       ? Colors.white
                       : isCompleted
-                          ? UIColors.secondaryColor
+                          ? Colors.white
                           : UIColors.headerColor.withOpacity(0.5),
                 ),
               ),

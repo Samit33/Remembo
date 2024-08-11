@@ -85,14 +85,11 @@ class _ReviewCardState extends State<ReviewCard> {
           ),
           SizedBox(width: 16),
           AnimatedButton(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
-              child: Image.asset(
-                UiAssets.resourceScreenHeaderBGDefault,
-                height: 64,
-                width: 64,
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              UiAssets.reviewCardIcon,
+              height: 48,
+              width: 48,
+              fit: BoxFit.cover,
             ),
             onTap: () {
               Navigator.pop(context);
@@ -167,12 +164,6 @@ class _ReviewCardState extends State<ReviewCard> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Question:',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
                                     SizedBox(height: 8),
                                     MarkdownBody(
                                       data: question,
@@ -181,17 +172,14 @@ class _ReviewCardState extends State<ReviewCard> {
                                           .copyWith(
                                         p: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge,
+                                            .titleLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     SizedBox(height: 24),
                                     if (showAnswer) ...[
-                                      Text(
-                                        'Answer:',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
+                                      const Divider(),
                                       SizedBox(height: 8),
                                       MarkdownBody(
                                         data: answer,
@@ -218,38 +206,39 @@ class _ReviewCardState extends State<ReviewCard> {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                AnimatedButton(
-                                  onTap: currentCardIndex > 0
-                                      ? () {
-                                          setState(() {
-                                            currentCardIndex--;
-                                            showAnswer = false;
-                                          });
-                                        }
-                                      : () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    width: 112,
-                                    height: 48,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: UIColors.secondaryBGColor,
-                                      borderRadius: BorderRadius.circular(
-                                          UiValues.defaultBorderRadius),
-                                    ),
-                                    child: const Text(
-                                      "Previous",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: UIFonts.fontBold,
-                                          fontWeight: FontWeight.bold,
-                                          color: UIColors.subHeaderColor),
+                                if (currentCardIndex > 0)
+                                  AnimatedButton(
+                                    onTap: currentCardIndex > 0
+                                        ? () {
+                                            setState(() {
+                                              currentCardIndex--;
+                                              showAnswer = false;
+                                            });
+                                          }
+                                        : () {},
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      width: 112,
+                                      height: 48,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: UIColors.secondaryBGColor,
+                                        borderRadius: BorderRadius.circular(
+                                            UiValues.defaultBorderRadius),
+                                      ),
+                                      child: const Text(
+                                        "Previous",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: UIFonts.fontBold,
+                                            fontWeight: FontWeight.bold,
+                                            color: UIColors.subHeaderColor),
+                                      ),
                                     ),
                                   ),
-                                ),
                                 AnimatedButton(
                                   onTap: () {
                                     setState(() {
@@ -267,10 +256,9 @@ class _ReviewCardState extends State<ReviewCard> {
                                           UiValues.defaultBorderRadius),
                                     ),
                                     child: Text(
-                                      showAnswer
-                                          ? 'Hide Answer'
-                                          : 'Show Answer',
+                                      showAnswer ? 'Hide' : 'Show',
                                       textAlign: TextAlign.center,
+                                      maxLines: 2,
                                       style: const TextStyle(
                                           fontSize: 18,
                                           fontFamily: UIFonts.fontBold,

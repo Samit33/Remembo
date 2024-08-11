@@ -102,14 +102,11 @@ class _QuizCardState extends State<QuizCard> {
           ),
           SizedBox(width: 16),
           AnimatedButton(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
-              child: Image.asset(
-                UiAssets.resourceScreenHeaderBGDefault,
-                height: 64,
-                width: 64,
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              UiAssets.quizCardIcon,
+              height: 48,
+              width: 48,
+              fit: BoxFit.cover,
             ),
             onTap: () {
               Navigator.pop(context);
@@ -169,7 +166,7 @@ class _QuizCardState extends State<QuizCard> {
         child: Text(
           value,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 16,
             fontFamily: UIFonts.fontRegular,
             color: textColor,
           ),
@@ -180,11 +177,11 @@ class _QuizCardState extends State<QuizCard> {
 
   Widget _buildBottomButtons(List<Map<String, dynamic>> quizCards) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(UiValues.defaultPadding * 2),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (quizCards.length > 1)
+          if (currentCardIndex > 0)
             Expanded(
               child: _buildNavigationButton(
                 "Previous",
@@ -217,32 +214,32 @@ class _QuizCardState extends State<QuizCard> {
                     : null,
               ),
             ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildNavigationButton(
-              currentCardIndex < quizCards.length - 1 ? 'Next' : 'Finish',
-              UIColors.secondaryColor,
-              Colors.white,
-              answerSubmitted
-                  ? () {
-                      if (currentCardIndex < quizCards.length - 1) {
-                        setState(() {
-                          currentCardIndex++;
-                          selectedAnswer = null;
-                          answerSubmitted = false;
-                        });
-                      } else {
-                        _updateCurrentSectionIdentifier();
-                        Navigator.pushReplacementNamed(
-                          context,
-                          '/resource_screen',
-                          arguments: widget.docId,
-                        );
+          if (answerSubmitted)
+            Expanded(
+              child: _buildNavigationButton(
+                currentCardIndex < quizCards.length - 1 ? 'Next' : 'Finish',
+                UIColors.secondaryColor,
+                Colors.white,
+                answerSubmitted
+                    ? () {
+                        if (currentCardIndex < quizCards.length - 1) {
+                          setState(() {
+                            currentCardIndex++;
+                            selectedAnswer = null;
+                            answerSubmitted = false;
+                          });
+                        } else {
+                          _updateCurrentSectionIdentifier();
+                          Navigator.pushReplacementNamed(
+                            context,
+                            '/resource_screen',
+                            arguments: widget.docId,
+                          );
+                        }
                       }
-                    }
-                  : null,
+                    : null,
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -350,18 +347,11 @@ class _QuizCardState extends State<QuizCard> {
                           Expanded(
                             child: SingleChildScrollView(
                               child: Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.all(
+                                    UiValues.defaultPadding * 2),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Question ${currentCardIndex + 1} of ${quizCards.length}',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: UIFonts.fontBold,
-                                        color: UIColors.subHeaderColor,
-                                      ),
-                                    ),
                                     const SizedBox(height: 16),
                                     MarkdownBody(
                                       data: quizCards[currentCardIndex]['Q'] ??
@@ -371,7 +361,8 @@ class _QuizCardState extends State<QuizCard> {
                                           .copyWith(
                                         p: const TextStyle(
                                           fontSize: 16,
-                                          fontFamily: UIFonts.fontRegular,
+                                          fontFamily: UIFonts.fontBold,
+                                          fontWeight: FontWeight.bold,
                                           color: UIColors.headerColor,
                                         ),
                                       ),

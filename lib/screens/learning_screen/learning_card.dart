@@ -95,14 +95,11 @@ class _LearningCardState extends State<LearningCard> {
           ),
           SizedBox(width: 16),
           AnimatedButton(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(UiValues.defaultBorderRadius),
-              child: Image.asset(
-                UiAssets.resourceScreenHeaderBGDefault,
-                height: 64,
-                width: 64,
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              UiAssets.learningCardIcon,
+              height: 48,
+              width: 48,
+              fit: BoxFit.cover,
             ),
             onTap: () {
               Navigator.pop(context);
@@ -214,37 +211,38 @@ class _LearningCardState extends State<LearningCard> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            AnimatedButton(
-                              onTap: currentCardIndex > 0
-                                  ? () {
-                                      setState(() {
-                                        currentCardIndex--;
-                                      });
-                                    }
-                                  : () {},
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                width: 172,
-                                height: 48,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: UIColors.secondaryBGColor,
-                                  borderRadius: BorderRadius.circular(
-                                      UiValues.defaultBorderRadius),
-                                ),
-                                child: const Text(
-                                  "Previous",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: UIFonts.fontBold,
-                                      fontWeight: FontWeight.bold,
-                                      color: UIColors.subHeaderColor),
+                            if (currentCardIndex > 0)
+                              AnimatedButton(
+                                onTap: currentCardIndex > 0
+                                    ? () {
+                                        setState(() {
+                                          currentCardIndex--;
+                                        });
+                                      }
+                                    : () {},
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  width: 172,
+                                  height: 48,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: UIColors.secondaryBGColor,
+                                    borderRadius: BorderRadius.circular(
+                                        UiValues.defaultBorderRadius),
+                                  ),
+                                  child: const Text(
+                                    "Previous",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: UIFonts.fontBold,
+                                        fontWeight: FontWeight.bold,
+                                        color: UIColors.subHeaderColor),
+                                  ),
                                 ),
                               ),
-                            ),
                             AnimatedButton(
                               onTap: () {
                                 if (currentCardIndex < cards.length - 1) {

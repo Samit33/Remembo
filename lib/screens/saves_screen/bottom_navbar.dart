@@ -50,7 +50,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return Container(
       height: 60,
       decoration: const BoxDecoration(
-        color: UIColors.secondaryColor,
+        gradient: LinearGradient(
+          colors: [
+            UIColors.primaryGradientColor1,
+            UIColors.primaryGradientColor2
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),

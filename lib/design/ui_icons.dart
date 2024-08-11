@@ -16,6 +16,9 @@ class UiAssets {
       'assets/images/Icons/SavesIcon_Selected.png';
   static const String searchIcon = 'assets/images/Icons/SearchIcon.png';
   static const String addIcon = 'assets/images/Icons/AddIcon2.png';
+  static const String learningCardIcon = 'assets/images/Icons/learningCard.png';
+  static const String quizCardIcon = 'assets/images/Icons/quizCard.png';
+  static const String reviewCardIcon = 'assets/images/Icons/reviewCard.png';
 
   static const String savesScreenHeaderBG =
       'assets/images/bg/SaveScreenHeader.png';
