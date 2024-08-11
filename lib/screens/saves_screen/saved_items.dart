@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/design/GradientCircularProgressIndicator.dart';
 import 'package:myapp/design/animated_button';
 import 'package:myapp/design/ui_colors.dart';
 import 'package:myapp/design/ui_icons.dart';
 import 'package:myapp/design/ui_values.dart';
+import 'radial_progress.dart';
 import 'add_to_collection_dialog.dart';
 
 class SavedItemsList extends StatefulWidget {
@@ -255,6 +255,7 @@ class SavedItem extends StatelessWidget {
               RadialProgressWidget(
                 progress: currentSectionIdentifier / totalSections,
               ),
+              // AnimatedRadialProgressWidget()
             ],
           ),
           const SizedBox(height: 16),
@@ -308,42 +309,6 @@ class SavedItem extends StatelessWidget {
           color: UIColors.secondaryColor,
           fontSize: 12,
         ),
-      ),
-    );
-  }
-}
-
-class RadialProgressWidget extends StatelessWidget {
-  final double progress;
-
-  const RadialProgressWidget({Key? key, required this.progress})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      height: 40,
-      child: Stack(
-        children: [
-          CircularProgressIndicator(
-            value: progress,
-            backgroundColor: Colors.grey[300],
-            valueColor:
-                AlwaysStoppedAnimation<Color>(UIColors.primaryGradientColor1),
-            strokeWidth: 4,
-          ),
-          Center(
-            child: Text(
-              '${(progress * 100).toInt()}%',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: UIColors.primaryGradientColor1,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
