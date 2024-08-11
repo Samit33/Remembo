@@ -46,9 +46,13 @@ class _SavedItemsListState extends State<SavedItemsList> {
           return data?['status'] == 'completed' || data?['status'] == null;
         }).toList();
 
-        final filteredDocs = completedDocs.where((doc) {
+        // Filter out the 'collections' document and separate processing/completed docs
+        final filteredDocs = allDocs.where((doc) {
           final data = doc.data() as Map<String, dynamic>?;
-          if (data == null) return false;
+          if (data == null || doc.id == 'collections') return false;
+
+          final status = data['status'] as String?;
+          if (status == 'processing') return false;
 
           final title = (data['title'] as String? ?? '').toLowerCase();
           final tags = (data['overallTags'] as List<dynamic>? ?? [])
