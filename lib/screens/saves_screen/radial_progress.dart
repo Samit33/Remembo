@@ -84,34 +84,11 @@ import 'package:myapp/design/ui_colors.dart';
 
 // For Video Purpose Only
 
-class AnimatedRadialProgressWidget extends StatefulWidget {
-  @override
-  _AnimatedRadialProgressWidgetState createState() =>
-      _AnimatedRadialProgressWidgetState();
-}
+class AnimatedRadialProgressWidget extends StatelessWidget {
+  final Animation<double> animation;
 
-class _AnimatedRadialProgressWidgetState
-    extends State<AnimatedRadialProgressWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  const AnimatedRadialProgressWidget({Key? key, required this.animation})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,13 +96,13 @@ class _AnimatedRadialProgressWidgetState
       width: 40,
       height: 40,
       child: AnimatedBuilder(
-        animation: _animation,
+        animation: animation,
         builder: (context, child) {
           return CustomPaint(
-            painter: GradientCircularProgressPainter(_animation.value),
+            painter: GradientCircularProgressPainter(animation.value),
             child: Center(
               child: Text(
-                '${(_animation.value * 100).toInt()}%',
+                '${(animation.value * 100).toInt()}%',
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.black,

@@ -28,8 +28,8 @@ class UIColors {
   static const Color primaryGradientColor1 = Color(0xFF7472F5);
   static const Color primaryGradientColor2 = Color(0xFF3F68FA);
   static const Color secondaryGradientColor1 =
-      Color.fromARGB(255, 84, 250, 120);
-  static const Color secondaryGradientColor2 = Color.fromARGB(255, 76, 184, 99);
+      Color.fromARGB(255, 134, 247, 159);
+  static const Color secondaryGradientColor2 = Color.fromRGBO(58, 173, 83, 1);
 
   // Add BoxShadow constants
   static const BoxShadow dropShadow = BoxShadow(

@@ -61,8 +61,8 @@ class _SavesScreenState extends State<SavesScreen> {
     );
     await widget.notificationsPlugin.show(
       0,
-      'New Card Ready',
-      '"$title" is ready to view.',
+      'Resume learning next section',
+      'What are Large Language Models(LLMs)?',
       platformChannelSpecifics,
       payload: docId, // Pass the document ID as the payload
     );

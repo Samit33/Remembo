@@ -22,7 +22,26 @@ class SavedItemsList extends StatefulWidget {
   _SavedItemsListState createState() => _SavedItemsListState();
 }
 
-class _SavedItemsListState extends State<SavedItemsList> {
+class _SavedItemsListState extends State<SavedItemsList>
+    with TickerProviderStateMixin {
+  late AnimationController _sequentialController;
+  List<Animation<double>> _animations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _sequentialController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 8), // Total duration for all animations
+    );
+  }
+
+  @override
+  void dispose() {
+    _sequentialController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -37,54 +56,89 @@ class _SavedItemsListState extends State<SavedItemsList> {
         }
 
         final allDocs = snapshot.data!.docs;
-        final processingDocs = allDocs.where((doc) {
-          final data = doc.data() as Map<String, dynamic>?;
-          return data?['status'] == 'processing';
-        }).toList();
-        final completedDocs = allDocs.where((doc) {
-          final data = doc.data() as Map<String, dynamic>?;
-          return data?['status'] == 'completed' || data?['status'] == null;
-        }).toList();
+        final processingDocs = _getProcessingDocs(allDocs);
+        final filteredDocs = _filterAndSortDocs(allDocs);
 
-        // Filter out the 'collections' document and separate processing/completed docs
-        final filteredDocs = allDocs.where((doc) {
-          final data = doc.data() as Map<String, dynamic>?;
-          if (data == null || doc.id == 'collections') return false;
-
-          final status = data['status'] as String?;
-          if (status == 'processing') return false;
-
-          final title = (data['title'] as String? ?? '').toLowerCase();
-          final tags = (data['overallTags'] as List<dynamic>? ?? [])
-              .map((tag) => (tag as String).toLowerCase())
-              .toList();
-          final query = widget.searchQuery.toLowerCase();
-
-          return title.contains(query) ||
-              tags.any((tag) => tag.contains(query));
-        }).toList();
-
-        // Sort filtered documents by timestamp in descending order
-        filteredDocs.sort((a, b) {
-          final aData = a.data() as Map<String, dynamic>?;
-          final bData = b.data() as Map<String, dynamic>?;
-          final aTimestamp = aData?['timestamp'] as Timestamp?;
-          final bTimestamp = bData?['timestamp'] as Timestamp?;
-          if (aTimestamp == null || bTimestamp == null) return 0;
-          return bTimestamp.compareTo(aTimestamp);
-        });
+        // Create sequential animations
+        _createSequentialAnimations(filteredDocs.length);
 
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
             if (processingDocs.isNotEmpty)
               _buildProcessingCards(processingDocs),
-            // Use the sorted filteredDocs to build completed cards
-            ...filteredDocs.map((doc) => _buildCompletedCard(doc)),
+            ...filteredDocs.asMap().entries.map((entry) {
+              final index = entry.key;
+              final doc = entry.value;
+              return _buildCompletedCard(doc, _animations[index]);
+            }),
           ],
         );
       },
     );
+  }
+
+  List<QueryDocumentSnapshot> _getProcessingDocs(
+      List<QueryDocumentSnapshot> allDocs) {
+    return allDocs.where((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      return data?['status'] == 'processing';
+    }).toList();
+  }
+
+  List<QueryDocumentSnapshot> _filterAndSortDocs(
+      List<QueryDocumentSnapshot> allDocs) {
+    final completedDocs = allDocs.where((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      return data?['status'] == 'completed' || data?['status'] == null;
+    }).toList();
+
+    // Filter out the 'collections' document and separate processing/completed docs
+    final filteredDocs = allDocs.where((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null || doc.id == 'collections') return false;
+
+      final status = data['status'] as String?;
+      if (status == 'processing') return false;
+
+      final title = (data['title'] as String? ?? '').toLowerCase();
+      final tags = (data['overallTags'] as List<dynamic>? ?? [])
+          .map((tag) => (tag as String).toLowerCase())
+          .toList();
+      final query = widget.searchQuery.toLowerCase();
+
+      return title.contains(query) || tags.any((tag) => tag.contains(query));
+    }).toList();
+
+    // Sort filtered documents by timestamp in descending order
+    filteredDocs.sort((a, b) {
+      final aData = a.data() as Map<String, dynamic>?;
+      final bData = b.data() as Map<String, dynamic>?;
+      final aTimestamp = aData?['timestamp'] as Timestamp?;
+      final bTimestamp = bData?['timestamp'] as Timestamp?;
+      if (aTimestamp == null || bTimestamp == null) return 0;
+      return bTimestamp.compareTo(aTimestamp);
+    });
+
+    return filteredDocs;
+  }
+
+  void _createSequentialAnimations(int count) {
+    _animations.clear();
+    final interval = 1.0 / count;
+    for (int i = 0; i < count; i++) {
+      final start = interval * i;
+      final end = start + interval;
+      _animations.add(
+        Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+            parent: _sequentialController,
+            curve: Interval(start, end, curve: Curves.easeInOut),
+          ),
+        ),
+      );
+    }
+    _sequentialController.forward(from: 0);
   }
 
   Widget _buildProcessingCards(List<QueryDocumentSnapshot> processingDocs) {
@@ -96,17 +150,14 @@ class _SavedItemsListState extends State<SavedItemsList> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        ...processingDocs.map((doc) => _buildProcessingCard(doc)),
+        ...processingDocs.map((doc) => ProcessingCard(doc: doc)),
         const SizedBox(height: 16),
       ],
     );
   }
 
-  Widget _buildProcessingCard(QueryDocumentSnapshot doc) {
-    return ProcessingCard(doc: doc);
-  }
-
-  Widget _buildCompletedCard(QueryDocumentSnapshot doc) {
+  Widget _buildCompletedCard(
+      QueryDocumentSnapshot doc, Animation<double> animation) {
     final data = doc.data() as Map<String, dynamic>?;
     if (data == null || doc.id == 'collections') {
       return Container();
@@ -129,6 +180,7 @@ class _SavedItemsListState extends State<SavedItemsList> {
         tags: displayTags,
         currentSectionIdentifier: data['currentSectionIdentifier'] as int? ?? 1,
         totalSections: totalSections,
+        progressAnimation: animation,
       ),
     );
   }
@@ -215,19 +267,21 @@ class _ProcessingCardState extends State<ProcessingCard> {
 }
 
 class SavedItem extends StatelessWidget {
+  final String itemId;
   final String title;
-  final List tags;
+  final List<String> tags;
   final int currentSectionIdentifier;
   final int totalSections;
-  final String itemId;
+  final Animation<double> progressAnimation;
 
   const SavedItem({
     super.key,
+    required this.itemId,
     required this.title,
     required this.tags,
     required this.currentSectionIdentifier,
     required this.totalSections,
-    required this.itemId,
+    required this.progressAnimation,
   });
 
   @override
@@ -256,10 +310,7 @@ class SavedItem extends StatelessWidget {
                   ),
                 ),
               ),
-              // RadialProgressWidget(
-              //   progress: currentSectionIdentifier / totalSections,
-              // ),
-              AnimatedRadialProgressWidget()
+              AnimatedRadialProgressWidget(animation: progressAnimation),
             ],
           ),
           const SizedBox(height: 16),

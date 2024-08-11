@@ -5,7 +5,7 @@ import 'package:myapp/design/ui_fonts.dart';
 import 'package:myapp/design/ui_values.dart';
 import '../learning_screen/learning_card.dart';
 
-class ProgressTimeline extends StatelessWidget {
+class ProgressTimeline extends StatefulWidget {
   final List<String> sectionTitles;
   final String docId;
   final int currentSectionIdentifier;
@@ -18,6 +18,40 @@ class ProgressTimeline extends StatelessWidget {
     required this.docId,
     required this.currentSectionIdentifier,
   });
+
+  @override
+  _ProgressTimelineState createState() => _ProgressTimelineState();
+}
+
+class _ProgressTimelineState extends State<ProgressTimeline>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<int> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+
+    _animation = IntTween(begin: 2, end: widget.sectionTitles.length)
+        .animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    Future.delayed(const Duration(microseconds: 500), () {
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +74,11 @@ class ProgressTimeline extends StatelessWidget {
       bottom: 0,
       child: CustomPaint(
         painter: _VerticalFillMeterPainter(
-          sectionCount: sectionTitles.length,
-          completedSections: currentSectionIdentifier - 1,
-          sectionPositions: List.generate(sectionTitles.length, (index) {
-            return (index * (sectionHeightDefault * 4 + 16)) +
-                sectionHeightDefault * 3;
+          sectionCount: widget.sectionTitles.length,
+          completedSections: _animation.value - 1,
+          sectionPositions: List.generate(widget.sectionTitles.length, (index) {
+            return (index * (ProgressTimeline.sectionHeightDefault * 4 + 16)) +
+                ProgressTimeline.sectionHeightDefault * 3;
           }),
         ),
         child: SizedBox(
@@ -60,13 +94,14 @@ class ProgressTimeline extends StatelessWidget {
       shrinkWrap: true,
       padding: const EdgeInsets.only(left: 64, right: 16, top: 0, bottom: 16),
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: sectionTitles.length,
+      itemCount: widget.sectionTitles.length,
       itemBuilder: (context, index) {
-        bool isCurrent = index == (currentSectionIdentifier - 1);
-        bool isCompleted = index < (currentSectionIdentifier - 1);
+        bool isCurrent = index == (_animation.value - 1);
+        bool isCompleted = index < (_animation.value - 1);
 
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: sectionHeightDefault),
+          padding: const EdgeInsets.symmetric(
+              vertical: ProgressTimeline.sectionHeightDefault),
           child: AnimatedButton(
             onTap: () {
               if (isCompleted || isCurrent) {
@@ -86,36 +121,35 @@ class ProgressTimeline extends StatelessWidget {
                           curve: Curves.elasticInOut,
                         ),
                         child: LearningCard(
-                          docId: docId,
-                          sectionTitle: sectionTitles[index],
+                          docId: widget.docId,
+                          sectionTitle: widget.sectionTitles[index],
                         ));
                   },
                 );
               }
             },
             child: Container(
-              padding: const EdgeInsets.all(sectionHeightDefault),
+              padding:
+                  const EdgeInsets.all(ProgressTimeline.sectionHeightDefault),
               decoration: BoxDecoration(
                 boxShadow: const [UIColors.lighterDropShadow],
                 color: isCurrent
-                    // ? UIColors.accentColor
                     ? UIColors.primaryGradientColor1
                     : isCompleted
-                        // ? UIColors.secondaryColor
                         ? Colors.white
                         : Colors.grey[300],
                 borderRadius:
                     BorderRadius.circular(UiValues.defaultBorderRadius),
               ),
               child: Text(
-                sectionTitles[index],
+                widget.sectionTitles[index],
                 style: TextStyle(
                   fontFamily: UIFonts.fontBold,
+                  fontSize: 16,
                   fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
                   color: isCurrent
                       ? Colors.white
                       : isCompleted
-                          // ? Colors.white
                           ? UIColors.secondaryColor
                           : UIColors.headerColor.withOpacity(0.5),
                 ),
