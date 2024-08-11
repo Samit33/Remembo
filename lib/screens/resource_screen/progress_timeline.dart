@@ -98,9 +98,11 @@ class ProgressTimeline extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: const [UIColors.lighterDropShadow],
                 color: isCurrent
-                    ? UIColors.accentColor
+                    // ? UIColors.accentColor
+                    ? UIColors.primaryGradientColor1
                     : isCompleted
-                        ? UIColors.secondaryColor
+                        // ? UIColors.secondaryColor
+                        ? Colors.white
                         : Colors.grey[300],
                 borderRadius:
                     BorderRadius.circular(UiValues.defaultBorderRadius),
@@ -113,7 +115,8 @@ class ProgressTimeline extends StatelessWidget {
                   color: isCurrent
                       ? Colors.white
                       : isCompleted
-                          ? Colors.white
+                          // ? Colors.white
+                          ? UIColors.secondaryColor
                           : UIColors.headerColor.withOpacity(0.5),
                 ),
               ),
