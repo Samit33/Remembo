@@ -5,7 +5,7 @@ import 'package:myapp/design/ui_fonts.dart';
 import 'package:myapp/design/ui_values.dart';
 import '../learning_screen/learning_card.dart';
 
-class ProgressTimeline extends StatefulWidget {
+class ProgressTimeline extends StatelessWidget {
   final List<String> sectionTitles;
   final String docId;
   final int currentSectionIdentifier;
@@ -18,45 +18,6 @@ class ProgressTimeline extends StatefulWidget {
     required this.docId,
     required this.currentSectionIdentifier,
   });
-
-  @override
-  _ProgressTimelineState createState() => _ProgressTimelineState();
-}
-
-class _ProgressTimelineState extends State<ProgressTimeline>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late List<Animation<double>> _animations;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 6),
-      vsync: this,
-    );
-
-    // Create a list of animations for each section
-    _animations = List.generate(widget.sectionTitles.length, (index) {
-      final start = index / widget.sectionTitles.length;
-      final end = (index + 1) / widget.sectionTitles.length;
-      return Tween<double>(begin: -1, end: 1).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: Interval(start, end, curve: Curves.easeInOut),
-        ),
-      );
-    });
-
-    // Start the animation
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +40,11 @@ class _ProgressTimelineState extends State<ProgressTimeline>
       bottom: 0,
       child: CustomPaint(
         painter: _VerticalFillMeterPainter(
-          sectionCount: widget.sectionTitles.length,
-          completedSections:
-              (_controller.value * widget.sectionTitles.length).floor(),
-          sectionPositions: List.generate(widget.sectionTitles.length, (index) {
-            return (index * (ProgressTimeline.sectionHeightDefault * 4 + 24)) +
-                ProgressTimeline.sectionHeightDefault * 3;
+          sectionCount: sectionTitles.length,
+          completedSections: currentSectionIdentifier - 1,
+          sectionPositions: List.generate(sectionTitles.length, (index) {
+            return (index * (sectionHeightDefault * 4 + 16)) +
+                sectionHeightDefault * 3;
           }),
         ),
         child: SizedBox(
@@ -100,69 +60,64 @@ class _ProgressTimelineState extends State<ProgressTimeline>
       shrinkWrap: true,
       padding: const EdgeInsets.only(left: 64, right: 16, top: 0, bottom: 16),
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: widget.sectionTitles.length,
+      itemCount: sectionTitles.length,
       itemBuilder: (context, index) {
-        bool isCurrent =
-            index == (_controller.value * widget.sectionTitles.length).floor();
-        bool isCompleted =
-            index < (_controller.value * widget.sectionTitles.length).floor();
+        bool isCurrent = index == (currentSectionIdentifier - 1);
+        bool isCompleted = index < (currentSectionIdentifier - 1);
 
-        return FadeTransition(
-          opacity: _animations[index],
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: ProgressTimeline.sectionHeightDefault),
-            child: AnimatedButton(
-              onTap: () {
-                if (isCompleted || isCurrent) {
-                  showGeneralDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    barrierLabel: MaterialLocalizations.of(context)
-                        .modalBarrierDismissLabel,
-                    barrierColor: Colors.black45,
-                    transitionDuration: const Duration(milliseconds: 250),
-                    pageBuilder: (BuildContext buildContext,
-                        Animation<double> animation,
-                        Animation secondaryAnimation) {
-                      return ScaleTransition(
-                          scale: CurvedAnimation(
-                            parent: animation,
-                            curve: Curves.elasticInOut,
-                          ),
-                          child: LearningCard(
-                            docId: widget.docId,
-                            sectionTitle: widget.sectionTitles[index],
-                          ));
-                    },
-                  );
-                }
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.all(ProgressTimeline.sectionHeightDefault),
-                decoration: BoxDecoration(
-                  boxShadow: const [UIColors.lighterDropShadow],
-                  color: isCurrent
-                      ? UIColors.primaryGradientColor1
-                      : isCompleted
-                          ? Colors.white
-                          : Colors.grey[300],
-                  borderRadius:
-                      BorderRadius.circular(UiValues.defaultBorderRadius),
-                ),
-                child: Text(
-                  widget.sectionTitles[index],
-                  style: TextStyle(
-                    fontFamily: UIFonts.fontBold,
-                    fontSize: 16,
-                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                    color: isCurrent
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: sectionHeightDefault),
+          child: AnimatedButton(
+            onTap: () {
+              if (isCompleted || isCurrent) {
+                showGeneralDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  barrierLabel: MaterialLocalizations.of(context)
+                      .modalBarrierDismissLabel,
+                  barrierColor: Colors.black45,
+                  transitionDuration: const Duration(milliseconds: 250),
+                  pageBuilder: (BuildContext buildContext,
+                      Animation<double> animation,
+                      Animation secondaryAnimation) {
+                    return ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.elasticInOut,
+                        ),
+                        child: LearningCard(
+                          docId: docId,
+                          sectionTitle: sectionTitles[index],
+                        ));
+                  },
+                );
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(sectionHeightDefault),
+              decoration: BoxDecoration(
+                boxShadow: const [UIColors.lighterDropShadow],
+                color: isCurrent
+                    // ? UIColors.accentColor
+                    ? UIColors.primaryGradientColor1
+                    : isCompleted
+                        // ? UIColors.secondaryColor
                         ? Colors.white
-                        : isCompleted
-                            ? UIColors.secondaryColor
-                            : UIColors.headerColor.withOpacity(0.5),
-                  ),
+                        : Colors.grey[300],
+                borderRadius:
+                    BorderRadius.circular(UiValues.defaultBorderRadius),
+              ),
+              child: Text(
+                sectionTitles[index],
+                style: TextStyle(
+                  fontFamily: UIFonts.fontBold,
+                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                  color: isCurrent
+                      ? Colors.white
+                      : isCompleted
+                          // ? Colors.white
+                          ? UIColors.secondaryColor
+                          : UIColors.headerColor.withOpacity(0.5),
                 ),
               ),
             ),

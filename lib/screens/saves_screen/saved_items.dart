@@ -47,7 +47,7 @@ class _SavedItemsListState extends State<SavedItemsList> {
         }).toList();
 
         // Filter out the 'collections' document and separate processing/completed docs
-        var filteredDocs = allDocs.where((doc) {
+        final filteredDocs = allDocs.where((doc) {
           final data = doc.data() as Map<String, dynamic>?;
           if (data == null || doc.id == 'collections') return false;
 
@@ -73,8 +73,6 @@ class _SavedItemsListState extends State<SavedItemsList> {
           if (aTimestamp == null || bTimestamp == null) return 0;
           return bTimestamp.compareTo(aTimestamp);
         });
-
-        filteredDocs = filteredDocs.take(1).toList();
 
         return ListView(
           padding: const EdgeInsets.all(16),
@@ -261,7 +259,7 @@ class SavedItem extends StatelessWidget {
               RadialProgressWidget(
                 progress: currentSectionIdentifier / totalSections,
               ),
-              //AnimatedRadialProgressWidget()
+              // AnimatedRadialProgressWidget()
             ],
           ),
           const SizedBox(height: 16),
