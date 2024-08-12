@@ -17,25 +17,25 @@ class SharedUrlHandler {
 
     try {
       print("sharing intent received, calling cloud function");
-      final response = await http.get(Uri.parse(endpoint));
-      if (response.statusCode == 200) {
-        print(
-            "Shared URL processed successfully: $sharedUrl"); // Debugging line
+      // final response = await http.get(Uri.parse(endpoint));
+      // if (response.statusCode == 200) {
+      //   print(
+      //       "Shared URL processed successfully: $sharedUrl"); // Debugging line
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-                  Text('Processing $sharedUrl. This may take a few minutes.')),
-        );
-      } else {
-        throw Exception('Failed to process URL');
-      }
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //         content:
+      //             Text('Processing $sharedUrl. This may take a few minutes.')),
+      //   );
+      // } else {
+      //   throw Exception('Failed to process URL');
+      // }
     } catch (e) {
       print('Error processing shared URL: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Error processing URL. Please try again.')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //       content: Text('Error processing URL. Please try again.')),
+      // );
     }
   }
 

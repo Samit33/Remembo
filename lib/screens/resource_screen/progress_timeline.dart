@@ -26,25 +26,30 @@ class ProgressTimeline extends StatefulWidget {
 class _ProgressTimelineState extends State<ProgressTimeline>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<int> _animation;
+  late List<Animation<double>> _animations;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 6),
       vsync: this,
     );
 
-    _animation = IntTween(begin: 2, end: widget.sectionTitles.length)
-        .animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    Future.delayed(const Duration(microseconds: 500), () {
-      _controller.forward();
+    // Create a list of animations for each section
+    _animations = List.generate(widget.sectionTitles.length, (index) {
+      final start = index / widget.sectionTitles.length;
+      final end = (index + 1) / widget.sectionTitles.length;
+      return Tween<double>(begin: -1, end: 1).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Interval(start, end, curve: Curves.easeInOut),
+        ),
+      );
     });
+
+    // Start the animation
+    _controller.forward();
   }
 
   @override
@@ -75,9 +80,10 @@ class _ProgressTimelineState extends State<ProgressTimeline>
       child: CustomPaint(
         painter: _VerticalFillMeterPainter(
           sectionCount: widget.sectionTitles.length,
-          completedSections: _animation.value - 1,
+          completedSections:
+              (_controller.value * widget.sectionTitles.length).floor(),
           sectionPositions: List.generate(widget.sectionTitles.length, (index) {
-            return (index * (ProgressTimeline.sectionHeightDefault * 4 + 16)) +
+            return (index * (ProgressTimeline.sectionHeightDefault * 4 + 24)) +
                 ProgressTimeline.sectionHeightDefault * 3;
           }),
         ),
@@ -96,62 +102,67 @@ class _ProgressTimelineState extends State<ProgressTimeline>
       physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.sectionTitles.length,
       itemBuilder: (context, index) {
-        bool isCurrent = index == (_animation.value - 1);
-        bool isCompleted = index < (_animation.value - 1);
+        bool isCurrent =
+            index == (_controller.value * widget.sectionTitles.length).floor();
+        bool isCompleted =
+            index < (_controller.value * widget.sectionTitles.length).floor();
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: ProgressTimeline.sectionHeightDefault),
-          child: AnimatedButton(
-            onTap: () {
-              if (isCompleted || isCurrent) {
-                showGeneralDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  barrierLabel: MaterialLocalizations.of(context)
-                      .modalBarrierDismissLabel,
-                  barrierColor: Colors.black45,
-                  transitionDuration: const Duration(milliseconds: 250),
-                  pageBuilder: (BuildContext buildContext,
-                      Animation<double> animation,
-                      Animation secondaryAnimation) {
-                    return ScaleTransition(
-                        scale: CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.elasticInOut,
-                        ),
-                        child: LearningCard(
-                          docId: widget.docId,
-                          sectionTitle: widget.sectionTitles[index],
-                        ));
-                  },
-                );
-              }
-            },
-            child: Container(
-              padding:
-                  const EdgeInsets.all(ProgressTimeline.sectionHeightDefault),
-              decoration: BoxDecoration(
-                boxShadow: const [UIColors.lighterDropShadow],
-                color: isCurrent
-                    ? UIColors.primaryGradientColor1
-                    : isCompleted
-                        ? Colors.white
-                        : Colors.grey[300],
-                borderRadius:
-                    BorderRadius.circular(UiValues.defaultBorderRadius),
-              ),
-              child: Text(
-                widget.sectionTitles[index],
-                style: TextStyle(
-                  fontFamily: UIFonts.fontBold,
-                  fontSize: 16,
-                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+        return FadeTransition(
+          opacity: _animations[index],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: ProgressTimeline.sectionHeightDefault),
+            child: AnimatedButton(
+              onTap: () {
+                if (isCompleted || isCurrent) {
+                  showGeneralDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierLabel: MaterialLocalizations.of(context)
+                        .modalBarrierDismissLabel,
+                    barrierColor: Colors.black45,
+                    transitionDuration: const Duration(milliseconds: 250),
+                    pageBuilder: (BuildContext buildContext,
+                        Animation<double> animation,
+                        Animation secondaryAnimation) {
+                      return ScaleTransition(
+                          scale: CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.elasticInOut,
+                          ),
+                          child: LearningCard(
+                            docId: widget.docId,
+                            sectionTitle: widget.sectionTitles[index],
+                          ));
+                    },
+                  );
+                }
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.all(ProgressTimeline.sectionHeightDefault),
+                decoration: BoxDecoration(
+                  boxShadow: const [UIColors.lighterDropShadow],
                   color: isCurrent
-                      ? Colors.white
+                      ? UIColors.primaryGradientColor1
                       : isCompleted
-                          ? UIColors.secondaryColor
-                          : UIColors.headerColor.withOpacity(0.5),
+                          ? Colors.white
+                          : Colors.grey[300],
+                  borderRadius:
+                      BorderRadius.circular(UiValues.defaultBorderRadius),
+                ),
+                child: Text(
+                  widget.sectionTitles[index],
+                  style: TextStyle(
+                    fontFamily: UIFonts.fontBold,
+                    fontSize: 16,
+                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                    color: isCurrent
+                        ? Colors.white
+                        : isCompleted
+                            ? UIColors.secondaryColor
+                            : UIColors.headerColor.withOpacity(0.5),
+                  ),
                 ),
               ),
             ),

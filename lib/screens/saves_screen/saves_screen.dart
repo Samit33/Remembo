@@ -61,8 +61,8 @@ class _SavesScreenState extends State<SavesScreen> {
     );
     await widget.notificationsPlugin.show(
       0,
-      'Resume learning next section',
-      'What are Large Language Models(LLMs)?',
+      "It's been a while! Do you still remember?",
+      'Take a quiz on : Introduction to Large Language Models(LLMs)?',
       platformChannelSpecifics,
       payload: docId, // Pass the document ID as the payload
     );
