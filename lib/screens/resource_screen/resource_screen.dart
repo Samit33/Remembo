@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/screens/resource_screen/resource_app_bar.dart';
+import 'package:remembo/screens/resource_screen/resource_app_bar.dart';
 import 'progress_timeline.dart';
-import 'package:myapp/screens/saves_screen/bottom_navbar.dart';
+import 'package:remembo/screens/saves_screen/bottom_navbar.dart';
 import 'comprehensive_quiz_screen.dart'; // Add this import
 
 class ResourceScreen extends StatefulWidget {

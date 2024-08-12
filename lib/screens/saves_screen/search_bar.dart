@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/design/animated_button';
-import 'package:myapp/design/ui_colors.dart';
-import 'package:myapp/design/ui_icons.dart';
-import 'package:myapp/design/ui_values.dart';
+import 'package:remembo/design/animated_button';
+import 'package:remembo/design/ui_colors.dart';
+import 'package:remembo/design/ui_icons.dart';
+import 'package:remembo/design/ui_values.dart';
 
 class SearchBarCustom extends StatelessWidget {
   final Function(String) onSearch;

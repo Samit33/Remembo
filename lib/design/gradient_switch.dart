@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/design/ui_colors.dart';
+import 'package:remembo/design/ui_colors.dart';
 
 class GradientSwitch extends StatefulWidget {
   final bool value;

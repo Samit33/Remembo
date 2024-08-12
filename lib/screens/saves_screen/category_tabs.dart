@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/design/animated_button';
+import 'package:remembo/design/animated_button';
 
 class CategoryTabs extends StatefulWidget {
   const CategoryTabs({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/design/ui_icons.dart';
-import 'package:myapp/screens/saves_screen/category_tabs.dart';
+import 'package:remembo/design/ui_icons.dart';
+import 'package:remembo/screens/saves_screen/category_tabs.dart';
 
 class SavesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const SavesAppBar({super.key});
