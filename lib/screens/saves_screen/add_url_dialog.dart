@@ -48,7 +48,7 @@ class AddUrlDialog extends StatelessWidget {
                         content: Text(
                             'Processing $url. This may take a few minutes.')),
                   );
-                  Navigator.of(context).pop(); // Close the dialog
+                  // Close the dialog
                 } else {
                   throw Exception('Failed to process URL');
                 }
@@ -66,6 +66,7 @@ class AddUrlDialog extends StatelessWidget {
                     content: Text('Invalid URL. Please enter a valid URL.')),
               );
             }
+            Navigator.of(context).pop();
           },
           child: const Text('Save', style: TextStyle(color: Colors.white)),
         ),
