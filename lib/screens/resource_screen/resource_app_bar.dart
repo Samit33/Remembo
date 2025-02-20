@@ -5,21 +5,23 @@ import 'package:remembo/design/ui_icons.dart';
 import 'package:remembo/design/ui_values.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:remembo/screens/markdown_display_screen.dart';
 
 class ResourceAppBar extends StatelessWidget implements PreferredSizeWidget {
-  String title = "";
-  String url = "";
-  String imageURL = "";
-  ImageProvider<Object> imageProvider =
-      const AssetImage(UiAssets.resourceScreenHeaderBGDefault);
+  final String title;
+  final String url;
+  final String imageURL;
+  final String content_with_intext_review;
+  final ImageProvider<Object> imageProvider;
   final Map<String, dynamic>? data;
 
-  ResourceAppBar({super.key, required this.data}) {
-    title = data?['title'] ?? "";
-    url = data?['url'] ?? "";
-    imageURL = data?['imageUrl'] ?? "";
-    imageProvider = CachedNetworkImageProvider(imageURL);
-  }
+  ResourceAppBar({super.key, required this.data})
+      : title = data?['title'] ?? "",
+        url = data?['url'] ?? "",
+        imageURL = data?['imageUrl'] ?? "",
+        imageProvider = CachedNetworkImageProvider(data?['imageUrl'] ?? ""),
+        content_with_intext_review = data?['content_with_intext_review'] ?? "";
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -116,6 +118,23 @@ class ResourceAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 launchUrl(Uri.parse(url),
                                     mode: LaunchMode.externalApplication);
                               },
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Navigate to MarkdownDisplayScreen
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MarkdownDisplayScreen(
+                                      markdownContent:
+                                          content_with_intext_review,
+                                      title: title,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text('View Markdown'),
                             ),
                           ],
                         ),
